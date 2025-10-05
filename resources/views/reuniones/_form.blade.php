@@ -346,11 +346,291 @@
     </div>
 </div>
 
-<div class="py-4 text-right">
-    <a href="{{ route('dashboard.reuniones.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+<!-- Botones de Acción -->
+<div class="flex justify-between items-center pt-8 border-t border-gray-200">
+    <a href="{{ route('dashboard.reuniones.index') }}" 
+       class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium">
+        <i class='bx bx-arrow-back mr-2'></i>
         Cancelar
     </a>
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ $submitButtonText ?? 'Guardar' }}
+    
+    <button type="submit" 
+            id="submitButton"
+            class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+        <i class='bx bx-save mr-2'></i>
+        <span id="submitText">{{ $submitButtonText ?? 'Guardar Reunión' }}</span>
+        <div id="submitSpinner" class="hidden ml-2">
+            <i class='bx bx-loader bx-spin'></i>
+        </div>
     </button>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ===== CONFIGURACIÓN INICIAL =====
+    const form = document.querySelector('form');
+    const submitButton = document.getElementById('submitButton');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    
+    // Elementos del formulario
+    const titulo = document.getElementById('titulo');
+    const fechaReunion = document.getElementById('fecha_reunion');
+    const solicitudId = document.getElementById('solicitud_id');
+    const institucionId = document.getElementById('institucion_id');
+    const asistentesCheckboxes = document.querySelectorAll('input[name="asistentes[]"]');
+    const concejalRadios = document.querySelectorAll('input[name="concejal"]');
+    
+    // ===== VALIDACIONES EN TIEMPO REAL =====
+    
+    // Validar título
+    titulo.addEventListener('input', function() {
+        validateField(this, 'titulo', {
+            required: true,
+            minLength: 5,
+            maxLength: 255
+        });
+    });
+    
+    // Validar fecha
+    fechaReunion.addEventListener('change', function() {
+        validateField(this, 'fecha', {
+            required: true,
+            futureDate: true
+        });
+    });
+    
+    // Validar selects
+    [solicitudId, institucionId].forEach(select => {
+        select.addEventListener('change', function() {
+            validateField(this, 'select', {
+                required: true
+            });
+        });
+    });
+    
+    // ===== LÓGICA DE ASISTENTES Y CONCEJAL =====
+    
+    // Manejar selección de asistentes
+    asistentesCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const cedula = this.value;
+            const concejalRadio = document.getElementById('concejal_' + cedula);
+            
+            // Si se deselecciona un asistente que era concejal
+            if (!this.checked && concejalRadio && concejalRadio.checked) {
+                concejalRadio.checked = false;
+                showNotification('El concejal fue removido de la selección', 'warning');
+            }
+            
+            // Actualizar contador de asistentes
+            updateAsistentesCounter();
+            validateAsistentes();
+        });
+    });
+    
+    // Manejar selección de concejal
+    concejalRadios.forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                const cedula = this.value;
+                const asistenteCheckbox = document.getElementById('asistente_' + cedula);
+                
+                // Auto-seleccionar como asistente si no está seleccionado
+                if (!asistenteCheckbox.checked) {
+                    asistenteCheckbox.checked = true;
+                    showNotification('Concejal agregado automáticamente como asistente', 'success');
+                }
+                
+                updateAsistentesCounter();
+            }
+        });
+    });
+    
+    // ===== FUNCIONES DE VALIDACIÓN =====
+    
+    function validateField(field, type, rules) {
+        const value = field.value.trim();
+        const fieldGroup = field.closest('.form-group');
+        
+        // Limpiar mensajes previos
+        clearFieldMessages(fieldGroup);
+        
+        // Validación requerido
+        if (rules.required && !value) {
+            setFieldError(field, fieldGroup, 'Este campo es obligatorio');
+            return false;
+        }
+        
+        // Validaciones específicas por tipo
+        switch(type) {
+            case 'titulo':
+                if (rules.minLength && value.length < rules.minLength) {
+                    setFieldError(field, fieldGroup, `Mínimo ${rules.minLength} caracteres`);
+                    return false;
+                }
+                if (rules.maxLength && value.length > rules.maxLength) {
+                    setFieldError(field, fieldGroup, `Máximo ${rules.maxLength} caracteres`);
+                    return false;
+                }
+                break;
+                
+            case 'fecha':
+                if (rules.futureDate && value) {
+                    const selectedDate = new Date(value);
+                    const now = new Date();
+                    if (selectedDate <= now) {
+                        setFieldError(field, fieldGroup, 'La fecha debe ser futura');
+                        return false;
+                    }
+                }
+                break;
+                
+            case 'select':
+                if (rules.required && !value) {
+                    setFieldError(field, fieldGroup, 'Debe seleccionar una opción');
+                    return false;
+                }
+                break;
+        }
+        
+        // Campo válido
+        setFieldSuccess(field, fieldGroup);
+        return true;
+    }
+    
+    function validateAsistentes() {
+        const selectedAsistentes = document.querySelectorAll('input[name="asistentes[]"]:checked');
+        const asistenteContainer = document.querySelector('input[name="asistentes[]"]').closest('.form-group');
+        
+        if (selectedAsistentes.length === 0) {
+            // No mostrar error si no hay asistentes (es opcional)
+            return true;
+        }
+        
+        return true;
+    }
+    
+    function setFieldError(field, fieldGroup, message) {
+        field.classList.remove('success');
+        field.classList.add('error');
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.innerHTML = `<i class='bx bx-error-circle'></i><span>${message}</span>`;
+        fieldGroup.appendChild(errorDiv);
+    }
+    
+    function setFieldSuccess(field, fieldGroup) {
+        field.classList.remove('error');
+        field.classList.add('success');
+        
+        const successDiv = document.createElement('div');
+        successDiv.className = 'success-message';
+        successDiv.innerHTML = `<i class='bx bx-check-circle'></i><span>Válido</span>`;
+        fieldGroup.appendChild(successDiv);
+        
+        // Auto-remover mensaje de éxito después de 2 segundos
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.remove();
+                field.classList.remove('success');
+            }
+        }, 2000);
+    }
+    
+    function clearFieldMessages(fieldGroup) {
+        const messages = fieldGroup.querySelectorAll('.error-message, .success-message');
+        messages.forEach(msg => msg.remove());
+    }
+    
+    // ===== FUNCIONES AUXILIARES =====
+    
+    function updateAsistentesCounter() {
+        const selectedCount = document.querySelectorAll('input[name="asistentes[]"]:checked').length;
+        const concejalSelected = document.querySelector('input[name="concejal"]:checked');
+        
+        // Actualizar contador visual (si existe)
+        const counter = document.querySelector('#asistentes-counter');
+        if (counter) {
+            counter.textContent = `${selectedCount} asistente(s) seleccionado(s)`;
+            if (concejalSelected) {
+                counter.textContent += ' (1 concejal designado)';
+            }
+        }
+    }
+    
+    function showNotification(message, type = 'info') {
+        // Crear notificación toast
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
+        
+        const typeClasses = {
+            success: 'bg-green-500 text-white',
+            error: 'bg-red-500 text-white',
+            warning: 'bg-yellow-500 text-white',
+            info: 'bg-blue-500 text-white'
+        };
+        
+        toast.className += ` ${typeClasses[type]}`;
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class='bx bx-${type === 'success' ? 'check' : type === 'error' ? 'x' : type === 'warning' ? 'error' : 'info'}-circle mr-2'></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Mostrar
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Ocultar y remover
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    
+    // ===== VALIDACIÓN Y ENVÍO DEL FORMULARIO =====
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validar todos los campos
+        let isValid = true;
+        
+        isValid &= validateField(titulo, 'titulo', {required: true, minLength: 5, maxLength: 255});
+        isValid &= validateField(fechaReunion, 'fecha', {required: true, futureDate: true});
+        isValid &= validateField(solicitudId, 'select', {required: true});
+        isValid &= validateField(institucionId, 'select', {required: true});
+        isValid &= validateAsistentes();
+        
+        if (isValid) {
+            // Mostrar loading
+            submitButton.disabled = true;
+            submitText.textContent = 'Guardando...';
+            submitSpinner.classList.remove('hidden');
+            
+            // Enviar formulario
+            setTimeout(() => {
+                form.submit();
+            }, 500);
+        } else {
+            showNotification('Por favor, corrija los errores en el formulario', 'error');
+        }
+    });
+    
+    // ===== INICIALIZACIÓN =====
+    updateAsistentesCounter();
+    
+    // Auto-validar campos al cargar si tienen valor
+    [titulo, fechaReunion, solicitudId, institucionId].forEach(field => {
+        if (field.value.trim()) {
+            field.dispatchEvent(new Event(field.type === 'select-one' ? 'change' : 'input'));
+        }
+    });
+});
+</script>
