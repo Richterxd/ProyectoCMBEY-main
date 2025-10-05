@@ -146,21 +146,26 @@
                     <i class='bx bx-calendar mr-2 text-blue-600'></i>
                     Fecha y Hora de la Reunión
                 </label>
-                <input type="datetime-local" 
-                       name="fecha_reunion" 
-                       id="fecha_reunion" 
-                       value="{{ old('fecha_reunion', isset($reunion) ? $reunion->fecha_reunion->format('Y-m-d\TH:i') : '') }}" 
-                       class="form-input {{ $errors->has('fecha_reunion') ? 'error' : '' }}"
-                       required
-                       min="{{ date('Y-m-d\TH:i') }}">
-                @error('fecha_reunion')
-                    <div class="error-message">
-                        <i class='bx bx-error-circle'></i>
-                        <span>{{ $message }}</span>
-                    </div>
-                @else
-                    <p class="text-gray-500 text-xs mt-1">Seleccione fecha y hora futura</p>
-                @enderror
+                <div class="relative">
+                    <input type="datetime-local" 
+                           name="fecha_reunion" 
+                           id="fecha_reunion" 
+                           value="{{ old('fecha_reunion', isset($reunion) ? $reunion->fecha_reunion->format('Y-m-d\TH:i') : '') }}" 
+                           class="form-input {{ $errors->has('fecha_reunion') ? 'error' : '' }}"
+                           required
+                           min="{{ date('Y-m-d\TH:i') }}"
+                           data-validation="required|future">
+                </div>
+                <div id="fecha_reunion-messages" class="validation-messages">
+                    @error('fecha_reunion')
+                        <div class="error-message">
+                            <i class='bx bx-error-circle'></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-xs mt-1">Debe ser una fecha y hora futura</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Ubicación -->
