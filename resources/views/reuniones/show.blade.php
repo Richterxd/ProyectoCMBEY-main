@@ -34,11 +34,27 @@
                     <div class="md:col-span-2">
                         <h3 class="text-lg font-medium text-gray-900">Asistentes</h3>
                         @if($reunion->asistentes->count() > 0)
-                            <ul class="mt-1 list-disc list-inside text-sm text-gray-600">
+                            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach($reunion->asistentes as $asistente)
-                                    <li>{{ $asistente->nombre }} {{ $asistente->apellido }}</li>
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                                <i class='bx bx-user text-blue-600'></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">{{ $asistente->nombre }} {{ $asistente->apellido }}</p>
+                                                <p class="text-xs text-gray-500">{{ $asistente->cedula }}</p>
+                                            </div>
+                                        </div>
+                                        @if($asistente->pivot->es_concejal)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <i class='bx bx-star mr-1'></i>
+                                                Concejal
+                                            </span>
+                                        @endif
+                                    </div>
                                 @endforeach
-                            </ul>
+                            </div>
                         @else
                             <p class="mt-1 text-sm text-gray-600">No hay asistentes registrados para esta reunión.</p>
                         @endif
