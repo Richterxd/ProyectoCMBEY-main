@@ -104,9 +104,31 @@ class ReunionController extends Controller
      */
     public function update(UpdateReunionRequest $request, Reunion $reunion)
     {
-        $reunion->update($request->validated());
+        $validated = $request->validated();
+        
+        // Update reunion data
+        $reunion->update($validated);
 
-        $reunion->asistentes()->sync($request->input('asistentes', []));
+        // Update asistentes with Concejal designation
+        if ($request->has('asistentes')) {
+            $asistentesData = [];
+            $concejal = $request->input('concejal');
+            
+            foreach ($request->input('asistentes', []) as $cedula) {
+                $asistentesData[$cedula] = ['es_concejal' => ($cedula === $concejal)];
+            }
+            
+            $reunion->asistentes()->sync($asistentesData);
+        } else {
+            $reunion->asistentes()->sync([]);
+        }
+
+        // Update parent solicitud status if requested  
+        if ($request->filled('nuevo_estado_solicitud')) {
+            $solicitud = $reunion->solicitud;
+            $solicitud->estado_detallado = $request->input('nuevo_estado_solicitud');
+            $solicitud->save();
+        }
 
         return redirect()->route('dashboard.reuniones.index')
                          ->with('success', 'Reunión actualizada exitosamente.');
