@@ -31,7 +31,9 @@ class UpdateReunionRequest extends FormRequest
             'fecha_reunion' => ['required', 'date'],
             'ubicacion' => ['nullable', 'string', 'max:255'],
             'asistentes' => ['nullable', 'array'],
-            'asistentes.*' => ['integer', 'exists:personas,id'],
+            'asistentes.*' => ['string', Rule::exists('personas', 'cedula')],
+            'concejal' => ['nullable', 'string', Rule::exists('personas', 'cedula')],
+            'nuevo_estado_solicitud' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
