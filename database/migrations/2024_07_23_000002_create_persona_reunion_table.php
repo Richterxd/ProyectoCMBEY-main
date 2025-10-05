@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('persona_reunion', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('persona_id');
+            $table->string('persona_cedula'); // Changed to cedula since Personas uses cedula as primary key
             $table->unsignedBigInteger('reunion_id');
+            $table->boolean('es_concejal')->default(false); // New field to mark Concejal
             $table->timestamps();
 
-            $table->foreign('persona_id')->references('id')->on('personas')->onDelete('cascade');
+            $table->foreign('persona_cedula')->references('cedula')->on('personas')->onDelete('cascade');
             $table->foreign('reunion_id')->references('id')->on('reuniones')->onDelete('cascade');
 
-            $table->unique(['persona_id', 'reunion_id']);
+            $table->unique(['persona_cedula', 'reunion_id']);
         });
     }
 
