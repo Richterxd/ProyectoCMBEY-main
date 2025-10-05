@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('solicitudes', function (Blueprint $table) {
-            // CÓDIGO CORREGIDO: SE ELIMINÓ ->nullable() de la clave primaria.
-            $table->string('solicitud_id')->primary()->unique(); // Custom ID: YYYYMMDD + hash
+            $table->id(); // Auto-incrementing primary key
+            $table->string('solicitud_id')->unique(); // Custom ID: YYYYMMDD + hash
             
             $table->string('titulo');
             $table->text('descripcion')->nullable();
