@@ -24,11 +24,11 @@ class UpdateReunionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'solicitud_id' => ['required', 'integer', 'exists:solicitudes,id'],
+            'solicitud_id' => ['required', 'string', 'exists:solicitudes,solicitud_id'],
             'institucion_id' => ['required', 'integer', 'exists:instituciones,id'],
             'titulo' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
-            'fecha_reunion' => ['required', 'date'],
+            'fecha_reunion' => ['required', 'date', 'after_or_equal:today'],
             'ubicacion' => ['nullable', 'string', 'max:255'],
             'asistentes' => ['nullable', 'array'],
             'asistentes.*' => ['integer', Rule::exists('personas', 'cedula')],
