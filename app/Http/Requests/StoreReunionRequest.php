@@ -23,13 +23,9 @@ class StoreReunionRequest extends FormRequest
             'ubicacion' => ['nullable', 'string', 'max:255'],
             'asistentes' => ['nullable', 'array'],
             
-            // 🛑 LA CORRECCIÓN CRÍTICA ESTÁ AQUÍ 🛑
-            'asistentes.*' => [
-                'integer', 
-                // Antes: 'exists:personas,id' (Fallaba porque 'id' no existe)
-                // Ahora: Rule::exists('personas', 'cedula') (Busca correctamente en 'cedula')
-                Rule::exists('personas', 'cedula'), 
-            ],
+            'asistentes.*' => ['string', Rule::exists('personas', 'cedula')],
+            'concejal' => ['nullable', 'string', Rule::exists('personas', 'cedula')],
+            'nuevo_estado_solicitud' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
