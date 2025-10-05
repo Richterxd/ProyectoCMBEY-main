@@ -116,22 +116,28 @@
                     <i class='bx bx-edit-alt mr-2 text-blue-600'></i>
                     Título de la Reunión
                 </label>
-                <input type="text" 
-                       name="titulo" 
-                       id="titulo" 
-                       value="{{ old('titulo', $reunion->titulo ?? '') }}" 
-                       class="form-input {{ $errors->has('titulo') ? 'error' : '' }}"
-                       placeholder="Ej: Reunión de seguimiento sobre solicitud de agua potable"
-                       required
-                       maxlength="255">
-                @error('titulo')
-                    <div class="error-message">
-                        <i class='bx bx-error-circle'></i>
-                        <span>{{ $message }}</span>
-                    </div>
-                @else
-                    <p class="text-gray-500 text-xs mt-1">Ingrese un título descriptivo para la reunión</p>
-                @enderror
+                <div class="relative">
+                    <input type="text" 
+                           name="titulo" 
+                           id="titulo" 
+                           value="{{ old('titulo', $reunion->titulo ?? '') }}" 
+                           class="form-input {{ $errors->has('titulo') ? 'error' : '' }}"
+                           placeholder="Ej: Reunión de seguimiento sobre solicitud de agua potable"
+                           required
+                           maxlength="255"
+                           data-validation="required|min:5|max:255">
+                    <div id="titulo-counter" class="field-counter text-right">0/255</div>
+                </div>
+                <div id="titulo-messages" class="validation-messages">
+                    @error('titulo')
+                        <div class="error-message">
+                            <i class='bx bx-error-circle'></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-xs mt-1">Ingrese un título descriptivo y claro para la reunión</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Fecha de Reunión -->
