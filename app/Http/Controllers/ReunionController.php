@@ -44,10 +44,28 @@ class ReunionController extends Controller
      */
     public function store(StoreReunionRequest $request)
     {
-        $reunion = Reunion::create($request->validated());
+        $validated = $request->validated();
+        
+        // Create the reunion
+        $reunion = Reunion::create($validated);
 
+        // Attach asistentes with Concejal designation
         if ($request->has('asistentes')) {
-            $reunion->asistentes()->sync($request->input('asistentes'));
+            $asistentesData = [];
+            $concejal = $request->input('concejal');
+            
+            foreach ($request->input('asistentes') as $cedula) {
+                $asistentesData[$cedula] = ['es_concejal' => ($cedula === $concejal)];
+            }
+            
+            $reunion->asistentes()->sync($asistentesData);
+        }
+
+        // Update parent solicitud status if requested
+        if ($request->filled('nuevo_estado_solicitud')) {
+            $solicitud = $reunion->solicitud;
+            $solicitud->estado_detallado = $request->input('nuevo_estado_solicitud');
+            $solicitud->save();
         }
 
         return redirect()->route('dashboard.reuniones.index')
