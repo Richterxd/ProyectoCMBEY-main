@@ -256,28 +256,32 @@
                     <i class='bx bx-buildings mr-2 text-green-600'></i>
                     Institución Responsable
                 </label>
-                <div class="relative">
+                <div class="select-wrapper">
                     <select name="institucion_id" 
                             id="institucion_id" 
                             class="form-input {{ $errors->has('institucion_id') ? 'error' : '' }}"
-                            required>
+                            required
+                            data-validation="required">
                         <option value="">Seleccione una institución...</option>
                         @foreach($instituciones as $id => $titulo)
-                            <option value="{{ $id }}" {{ (old('institucion_id', $reunion->institucion_id ?? '') == $id) ? 'selected' : '' }}>
+                            <option value="{{ $id }}" 
+                                    {{ (old('institucion_id', $reunion->institucion_id ?? '') == $id) ? 'selected' : '' }}
+                                    data-title="{{ $titulo }}">
                                 {{ $titulo }}
                             </option>
                         @endforeach
                     </select>
-                    <i class='bx bx-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none'></i>
                 </div>
-                @error('institucion_id')
-                    <div class="error-message">
-                        <i class='bx bx-error-circle'></i>
-                        <span>{{ $message }}</span>
-                    </div>
-                @else
-                    <p class="text-gray-500 text-xs mt-1">Institución que coordinará la reunión</p>
-                @enderror
+                <div id="institucion_id-messages" class="validation-messages">
+                    @error('institucion_id')
+                        <div class="error-message">
+                            <i class='bx bx-error-circle'></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-xs mt-1">Institución que coordinará la reunión</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Descripción -->
