@@ -19,3 +19,7 @@ yarn-error.log
 /.vscode
 /.zed
 # Note: .env file is included in this repository for deployment purposes
+-e 
+# Environment files
+*.env
+*.env.*
