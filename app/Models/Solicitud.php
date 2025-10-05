@@ -11,7 +11,7 @@ class Solicitud extends Model
 {
     protected $table = 'solicitudes';
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id'; // Uses standard auto-incrementing id
     
     public $timestamps = false;
 
