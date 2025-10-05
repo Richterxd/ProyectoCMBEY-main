@@ -91,8 +91,8 @@ class ReunionController extends Controller
         // CORRECCIÓN 2: Instituciones usa 'id' (Confirmado)
         $instituciones = Institucion::pluck('titulo', 'id');
         
-        // CORRECCIÓN FINAL 3: Usamos 'cedula' como ID para Personas
-        $personas = Personas::select('cedula as id', 'nombre', 'apellido')->get();
+        // Get personas using cedula as key
+        $personas = Personas::select('cedula', 'nombre', 'apellido')->get();
         
         $reunion->load('asistentes'); // Load current asistentes
         return view('reuniones.edit', compact('reunion', 'solicitudes', 'instituciones', 'personas'));
