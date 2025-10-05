@@ -174,21 +174,28 @@
                     <i class='bx bx-map-pin mr-2 text-blue-600'></i>
                     Ubicación
                 </label>
-                <input type="text" 
-                       name="ubicacion" 
-                       id="ubicacion" 
-                       value="{{ old('ubicacion', $reunion->ubicacion ?? '') }}" 
-                       class="form-input {{ $errors->has('ubicacion') ? 'error' : '' }}"
-                       placeholder="Ej: Sala de reuniones - Edificio Municipal"
-                       maxlength="255">
-                @error('ubicacion')
-                    <div class="error-message">
-                        <i class='bx bx-error-circle'></i>
-                        <span>{{ $message }}</span>
-                    </div>
-                @else
-                    <p class="text-gray-500 text-xs mt-1">Especifique el lugar donde se realizará la reunión</p>
-                @enderror
+                <div class="relative">
+                    <i class='bx bx-map input-icon'></i>
+                    <input type="text" 
+                           name="ubicacion" 
+                           id="ubicacion" 
+                           value="{{ old('ubicacion', $reunion->ubicacion ?? '') }}" 
+                           class="form-input pl-10 {{ $errors->has('ubicacion') ? 'error' : '' }}"
+                           placeholder="Ej: Sala de reuniones - Edificio Municipal"
+                           maxlength="255"
+                           data-validation="max:255">
+                    <div id="ubicacion-counter" class="field-counter text-right">0/255</div>
+                </div>
+                <div id="ubicacion-messages" class="validation-messages">
+                    @error('ubicacion')
+                        <div class="error-message">
+                            <i class='bx bx-error-circle'></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-xs mt-1">Especifique dónde se realizará la reunión (opcional)</p>
+                    @enderror
+                </div>
             </div>
         </div>
     </div>
