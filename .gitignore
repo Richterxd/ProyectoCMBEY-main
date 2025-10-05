@@ -18,19 +18,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
+# Note: .env file is included in this repository for deployment purposes
