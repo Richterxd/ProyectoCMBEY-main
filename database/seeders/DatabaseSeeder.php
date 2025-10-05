@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             SectoresSeeder::class,
             InstitucionSeeder::class,
             UserSeeder::class,
+            PersonasSeeder::class,
             SolicitudesSeeder::class,
         ]);
     }
