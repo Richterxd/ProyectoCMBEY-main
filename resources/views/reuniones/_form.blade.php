@@ -438,13 +438,21 @@
     </div>
 
     <!-- Estado de Solicitud -->
-    <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-6 border border-orange-100">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center mr-3">
-                <i class='bx bx-refresh text-white'></i>
+    <div class="card-section">
+        <div class="section-header">
+            <div class="section-icon bg-gradient-to-r from-orange-500 to-orange-600">
+                <i class='bx bx-refresh text-white text-xl'></i>
             </div>
-            Actualización de Estado (Opcional)
-        </h3>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Actualización de Estado</h3>
+                <p class="text-sm text-gray-600">Opcional: Actualice el estado de la solicitud asociada</p>
+            </div>
+            <div class="ml-auto">
+                <div class="text-xs text-gray-500 bg-yellow-100 px-2 py-1 rounded-full">
+                    Opcional
+                </div>
+            </div>
+        </div>
         
         <div class="form-group">
             <label for="nuevo_estado_solicitud" class="form-label">
@@ -452,28 +460,55 @@
                 Nuevo Estado de la Solicitud
             </label>
             <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class='bx bx-sync text-gray-400'></i>
-                </div>
+                <i class='bx bx-sync input-icon'></i>
                 <input type="text" 
                        name="nuevo_estado_solicitud" 
                        id="nuevo_estado_solicitud" 
                        class="form-input pl-10 {{ $errors->has('nuevo_estado_solicitud') ? 'error' : '' }}"
                        placeholder="Ej: En proceso: Reunión programada para seguimiento"
                        value="{{ old('nuevo_estado_solicitud') }}"
-                       maxlength="255">
+                       maxlength="255"
+                       data-validation="max:255">
+                <div id="nuevo_estado_solicitud-counter" class="field-counter text-right">0/255</div>
             </div>
-            @error('nuevo_estado_solicitud')
-                <div class="error-message">
-                    <i class='bx bx-error-circle'></i>
-                    <span>{{ $message }}</span>
+            
+            <!-- Estados sugeridos -->
+            <div class="mt-3">
+                <p class="text-xs text-gray-600 mb-2">Estados comunes:</p>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" 
+                            class="status-suggestion px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                            data-status="En proceso: Reunión programada">
+                        En proceso: Reunión programada
+                    </button>
+                    <button type="button" 
+                            class="status-suggestion px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                            data-status="Evaluación: En reunión técnica">
+                        Evaluación: En reunión técnica
+                    </button>
+                    <button type="button" 
+                            class="status-suggestion px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                            data-status="Seguimiento: Reunión de coordinación">
+                        Seguimiento: Reunión de coordinación
+                    </button>
                 </div>
-            @else
-                <p class="text-gray-500 text-xs mt-1">
-                    <i class='bx bx-lightbulb mr-1'></i>
-                    Si completa este campo, se actualizará automáticamente el estado de la solicitud asociada
-                </p>
-            @enderror
+            </div>
+            
+            <div id="nuevo_estado_solicitud-messages" class="validation-messages">
+                @error('nuevo_estado_solicitud')
+                    <div class="error-message">
+                        <i class='bx bx-error-circle'></i>
+                        <span>{{ $message }}</span>
+                    </div>
+                @else
+                    <div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <p class="text-sm text-yellow-800 flex items-start">
+                            <i class='bx bx-lightbulb mr-2 mt-0.5'></i>
+                            <span>Si completa este campo, se actualizará automáticamente el estado detallado de la solicitud asociada cuando se guarde la reunión.</span>
+                        </p>
+                    </div>
+                @enderror
+            </div>
         </div>
     </div>
 </div>
