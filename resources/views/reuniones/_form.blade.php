@@ -93,15 +93,21 @@
     }
 </style>
 
-<div class="space-y-8">
+<div class="space-y-6">
     <!-- Información Básica -->
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                <i class='bx bx-info-circle text-white'></i>
+    <div class="card-section">
+        <div class="section-header">
+            <div class="section-icon bg-gradient-to-r from-blue-500 to-blue-600">
+                <i class='bx bx-info-circle text-white text-xl'></i>
             </div>
-            Información Básica de la Reunión
-        </h3>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Información Básica</h3>
+                <p class="text-sm text-gray-600">Datos principales de la reunión</p>
+            </div>
+            <div class="ml-auto">
+                <div id="basic-info-status" class="w-3 h-3 rounded-full bg-gray-300"></div>
+            </div>
+        </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Título -->
