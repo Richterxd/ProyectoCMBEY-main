@@ -201,13 +201,19 @@
     </div>
 
     <!-- Relaciones -->
-    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3">
-                <i class='bx bx-link-alt text-white'></i>
+    <div class="card-section">
+        <div class="section-header">
+            <div class="section-icon bg-gradient-to-r from-green-500 to-green-600">
+                <i class='bx bx-link-alt text-white text-xl'></i>
             </div>
-            Relaciones y Contexto
-        </h3>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Relaciones y Contexto</h3>
+                <p class="text-sm text-gray-600">Vincule la reunión con solicitudes e instituciones</p>
+            </div>
+            <div class="ml-auto">
+                <div id="relations-status" class="w-3 h-3 rounded-full bg-gray-300"></div>
+            </div>
+        </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Solicitud Asociada -->
