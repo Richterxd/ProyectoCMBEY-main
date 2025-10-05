@@ -222,28 +222,32 @@
                     <i class='bx bx-file-blank mr-2 text-green-600'></i>
                     Solicitud Asociada
                 </label>
-                <div class="relative">
+                <div class="select-wrapper">
                     <select name="solicitud_id" 
                             id="solicitud_id" 
                             class="form-input {{ $errors->has('solicitud_id') ? 'error' : '' }}"
-                            required>
+                            required
+                            data-validation="required">
                         <option value="">Seleccione una solicitud...</option>
                         @foreach($solicitudes as $id => $titulo)
-                            <option value="{{ $id }}" {{ (old('solicitud_id', $reunion->solicitud_id ?? '') == $id) ? 'selected' : '' }}>
+                            <option value="{{ $id }}" 
+                                    {{ (old('solicitud_id', $reunion->solicitud_id ?? '') == $id) ? 'selected' : '' }}
+                                    data-title="{{ $titulo }}">
                                 {{ Str::limit($titulo, 60) }}
                             </option>
                         @endforeach
                     </select>
-                    <i class='bx bx-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none'></i>
                 </div>
-                @error('solicitud_id')
-                    <div class="error-message">
-                        <i class='bx bx-error-circle'></i>
-                        <span>{{ $message }}</span>
-                    </div>
-                @else
-                    <p class="text-gray-500 text-xs mt-1">Seleccione la solicitud que originó esta reunión</p>
-                @enderror
+                <div id="solicitud_id-messages" class="validation-messages">
+                    @error('solicitud_id')
+                        <div class="error-message">
+                            <i class='bx bx-error-circle'></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-xs mt-1">Seleccione la solicitud que originó esta reunión</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Institución Responsable -->
