@@ -31,7 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // CAMBIO CLAVE: 'reuniones' -> 'reunions'
-        Schema::dropIfExists('reunions');
+        Schema::dropIfExists('reuniones');
     }
 };
