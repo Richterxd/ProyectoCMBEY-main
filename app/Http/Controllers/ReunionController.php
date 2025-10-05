@@ -32,9 +32,8 @@ class ReunionController extends Controller
         // CORRECCIÓN 2: Instituciones usa 'id' (Confirmado)
         $instituciones = Institucion::pluck('titulo', 'id');
         
-        // CORRECCIÓN FINAL 3: Usamos 'cedula' como ID para Personas (Basado en tu clave foránea)
-        // La columna real es 'cedula', pero le damos el alias 'id' para el código PHP.
-        $personas = Personas::select('cedula as id', 'nombre', 'apellido')->get();
+        // Get personas using cedula as key
+        $personas = Personas::select('cedula', 'nombre', 'apellido')->get();
         
         return view('reuniones.create', compact('solicitudes', 'instituciones', 'personas'));
     }
