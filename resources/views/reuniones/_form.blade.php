@@ -314,49 +314,72 @@
         </div>
     </div>
 
-    <!-- Asistentes -->
-    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-6 border border-purple-100">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3">
-                <i class='bx bx-group text-white'></i>
+    <!-- Participantes -->
+    <div class="card-section">
+        <div class="section-header">
+            <div class="section-icon bg-gradient-to-r from-purple-500 to-purple-600">
+                <i class='bx bx-group text-white text-xl'></i>
             </div>
-            Participantes de la Reunión
-        </h3>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Participantes de la Reunión</h3>
+                <p class="text-sm text-gray-600">Seleccione asistentes y designe un concejal responsable</p>
+            </div>
+            <div class="ml-auto flex items-center space-x-3">
+                <div id="participants-counter" class="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                    0 seleccionados
+                </div>
+                <div id="participants-status" class="w-3 h-3 rounded-full bg-gray-300"></div>
+            </div>
+        </div>
         
-        <div class="form-group">
-            <div class="bg-white rounded-lg border-2 border-gray-200 p-4">
-                <div class="flex items-center justify-between mb-4">
-                    <label class="form-label">
-                        <i class='bx bx-user-check mr-2 text-purple-600'></i>
-                        Seleccionar Asistentes
-                    </label>
-                    <div class="flex items-center space-x-4 text-xs">
-                        <div class="flex items-center">
-                            <div class="w-4 h-4 bg-blue-100 border-2 border-blue-300 rounded mr-2"></div>
-                            <span class="text-gray-600">Asistente</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-4 h-4 bg-green-100 border-2 border-green-300 rounded-full mr-2"></div>
-                            <span class="text-gray-600">Concejal</span>
-                        </div>
+        <!-- Filtros y búsqueda -->
+        <div class="mb-6">
+            <div class="flex items-center space-x-4">
+                <div class="flex-1">
+                    <div class="relative">
+                        <i class='bx bx-search input-icon'></i>
+                        <input type="text" 
+                               id="participants-search" 
+                               class="form-input pl-10"
+                               placeholder="Buscar participante por nombre o cédula...">
                     </div>
                 </div>
-                
-                <div class="max-h-64 overflow-y-auto space-y-2">
+                <div class="flex items-center space-x-4 text-xs">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-100 border-2 border-blue-300 rounded mr-2"></div>
+                        <span class="text-gray-600">Asistente</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-green-100 border-2 border-green-300 rounded-full mr-2"></div>
+                        <span class="text-gray-600">Concejal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lista de participantes -->
+        <div class="form-group">
+            <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                <div class="max-h-80 overflow-y-auto space-y-3" id="participants-list">
                     @foreach($personas as $persona)
-                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200">
+                        <div class="participant-card" 
+                             data-name="{{ strtolower($persona->nombre . ' ' . $persona->apellido) }}"
+                             data-cedula="{{ $persona->cedula }}"
+                             id="participant-card-{{ $persona->cedula }}">
                             <div class="flex items-center flex-1">
                                 <input type="checkbox" 
                                        name="asistentes[]" 
                                        value="{{ $persona->cedula }}" 
                                        id="asistente_{{ $persona->cedula }}"
-                                       class="checkbox-custom mr-4"
+                                       class="checkbox-custom mr-4 participant-checkbox"
+                                       data-cedula="{{ $persona->cedula }}"
                                        {{ (isset($reunion) && $reunion->asistentes->contains('cedula', $persona->cedula)) ? 'checked' : '' }}>
                                 <label for="asistente_{{ $persona->cedula }}" class="cursor-pointer flex-1">
                                     <div class="font-medium text-gray-900">
                                         {{ $persona->nombre }} {{ $persona->apellido }}
                                     </div>
-                                    <div class="text-xs text-gray-500">
+                                    <div class="text-sm text-gray-500">
+                                        <i class='bx bx-id-card mr-1'></i>
                                         C.I: {{ number_format($persona->cedula, 0, '.', '.') }}
                                     </div>
                                 </label>
@@ -366,9 +389,11 @@
                                        name="concejal" 
                                        value="{{ $persona->cedula }}" 
                                        id="concejal_{{ $persona->cedula }}"
-                                       class="radio-custom text-green-600 focus:ring-green-500"
+                                       class="radio-custom text-green-600 focus:ring-green-500 concejal-radio"
+                                       data-cedula="{{ $persona->cedula }}"
                                        {{ (isset($reunion) && $reunion->concejal() && $reunion->concejal()->cedula === $persona->cedula) ? 'checked' : '' }}>
                                 <label for="concejal_{{ $persona->cedula }}" class="ml-2 text-sm text-green-700 cursor-pointer font-medium">
+                                    <i class='bx bx-crown mr-1'></i>
                                     Concejal
                                 </label>
                             </div>
@@ -376,26 +401,39 @@
                     @endforeach
                 </div>
                 
-                <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <p class="text-sm text-blue-800 flex items-center">
-                        <i class='bx bx-info-circle mr-2'></i>
-                        Seleccione los participantes y designe uno como Concejal responsable
-                    </p>
+                <div id="no-participants-found" class="hidden text-center py-8">
+                    <i class='bx bx-search text-gray-400 text-3xl mb-2'></i>
+                    <p class="text-gray-500">No se encontraron participantes</p>
                 </div>
             </div>
             
-            @error('asistentes')
-                <div class="error-message">
-                    <i class='bx bx-error-circle'></i>
-                    <span>{{ $message }}</span>
+            <!-- Resumen de selección -->
+            <div id="selection-summary" class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden">
+                <div class="flex items-start">
+                    <i class='bx bx-info-circle text-blue-600 text-xl mr-3 mt-0.5'></i>
+                    <div>
+                        <h4 class="font-medium text-blue-900 mb-2">Resumen de Participantes</h4>
+                        <div id="selection-details" class="text-sm text-blue-800">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
                 </div>
-            @enderror
-            @error('concejal')
-                <div class="error-message">
-                    <i class='bx bx-error-circle'></i>
-                    <span>{{ $message }}</span>
-                </div>
-            @enderror
+            </div>
+            
+            <div id="participants-messages" class="validation-messages">
+                @error('asistentes')
+                    <div class="error-message">
+                        <i class='bx bx-error-circle'></i>
+                        <span>{{ $message }}</span>
+                    </div>
+                @enderror
+                @error('concejal')
+                    <div class="error-message">
+                        <i class='bx bx-error-circle'></i>
+                        <span>{{ $message }}</span>
+                    </div>
+                @enderror
+            </div>
         </div>
     </div>
 
