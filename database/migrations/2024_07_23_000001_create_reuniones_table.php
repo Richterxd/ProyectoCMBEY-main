@@ -11,8 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // CAMBIO CLAVE: 'reuniones' -> 'reunions'
-        Schema::create('reunions', function (Blueprint $table) {
+        Schema::create('reuniones', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('solicitud_id');
             $table->unsignedBigInteger('institucion_id');
