@@ -290,19 +290,26 @@
                     <i class='bx bx-detail mr-2 text-green-600'></i>
                     Descripción y Objetivos
                 </label>
-                <textarea name="descripcion" 
-                          id="descripcion" 
-                          rows="4" 
-                          class="form-input {{ $errors->has('descripcion') ? 'error' : '' }}"
-                          placeholder="Describa los objetivos, agenda y temas a tratar en la reunión...">{{ old('descripcion', $reunion->descripcion ?? '') }}</textarea>
-                @error('descripcion')
-                    <div class="error-message">
-                        <i class='bx bx-error-circle'></i>
-                        <span>{{ $message }}</span>
-                    </div>
-                @else
-                    <p class="text-gray-500 text-xs mt-1">Detalles opcionales sobre la reunión</p>
-                @enderror
+                <div class="relative">
+                    <textarea name="descripcion" 
+                              id="descripcion" 
+                              rows="4" 
+                              class="form-input {{ $errors->has('descripcion') ? 'error' : '' }}"
+                              placeholder="Describa los objetivos, agenda y temas a tratar en la reunión..."
+                              maxlength="1000"
+                              data-validation="max:1000">{{ old('descripcion', $reunion->descripcion ?? '') }}</textarea>
+                    <div id="descripcion-counter" class="field-counter text-right">0/1000</div>
+                </div>
+                <div id="descripcion-messages" class="validation-messages">
+                    @error('descripcion')
+                        <div class="error-message">
+                            <i class='bx bx-error-circle'></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-xs mt-1">Detalles opcionales sobre objetivos y agenda de la reunión</p>
+                    @enderror
+                </div>
             </div>
         </div>
     </div>
