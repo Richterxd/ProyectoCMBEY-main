@@ -3,19 +3,23 @@
 <style>
     /* Estilos personalizados para formularios reactivos */
     .form-input {
-        @apply block w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-900;
+        @apply block w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-900 bg-white;
     }
     
     .form-input.error {
-        @apply border-red-300 focus:border-red-500 focus:ring-red-200;
+        @apply border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50;
     }
     
     .form-input.success {
-        @apply border-green-300 focus:border-green-500 focus:ring-green-200;
+        @apply border-green-300 focus:border-green-500 focus:ring-green-200 bg-green-50;
+    }
+    
+    .form-input.loading {
+        @apply border-yellow-300 bg-yellow-50;
     }
     
     .form-group {
-        @apply space-y-2;
+        @apply space-y-3;
     }
     
     .form-label {
@@ -24,15 +28,19 @@
     
     .form-label.required::after {
         content: " *";
-        @apply text-red-500;
+        @apply text-red-500 ml-1;
     }
     
     .error-message {
-        @apply text-red-600 text-sm flex items-center space-x-1;
+        @apply text-red-600 text-sm flex items-center space-x-1 mt-2;
     }
     
     .success-message {
-        @apply text-green-600 text-sm flex items-center space-x-1;
+        @apply text-green-600 text-sm flex items-center space-x-1 mt-2;
+    }
+    
+    .warning-message {
+        @apply text-yellow-600 text-sm flex items-center space-x-1 mt-2;
     }
     
     .checkbox-custom, .radio-custom {
@@ -41,6 +49,47 @@
     
     .radio-custom {
         @apply rounded-full;
+    }
+    
+    .card-section {
+        @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 transition-all duration-200 hover:shadow-md;
+    }
+    
+    .section-header {
+        @apply flex items-center mb-6 pb-4 border-b border-gray-100;
+    }
+    
+    .section-icon {
+        @apply w-12 h-12 rounded-full flex items-center justify-center mr-4 shadow-lg;
+    }
+    
+    .field-counter {
+        @apply text-xs text-gray-400 mt-1;
+    }
+    
+    .input-icon {
+        @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none;
+    }
+    
+    .select-wrapper {
+        @apply relative;
+    }
+    
+    .select-wrapper::after {
+        content: '';
+        @apply absolute right-3 top-1/2 transform -translate-y-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-400 pointer-events-none;
+    }
+    
+    .participant-card {
+        @apply flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 cursor-pointer;
+    }
+    
+    .participant-card.selected {
+        @apply bg-blue-50 border-blue-300;
+    }
+    
+    .participant-card.concejal {
+        @apply bg-green-50 border-green-300;
     }
 </style>
 
