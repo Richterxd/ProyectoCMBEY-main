@@ -122,6 +122,43 @@
     </div>
 </div>
 
+<script>
+    // JavaScript para mejorar la experiencia del usuario
+    document.addEventListener('DOMContentLoaded', function() {
+        // Manejar la selección de Concejal
+        const asistentesCheckboxes = document.querySelectorAll('input[name="asistentes[]"]');
+        const concejalRadios = document.querySelectorAll('input[name="concejal"]');
+        
+        // Cuando se selecciona/deselecciona un asistente
+        asistentesCheckboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const cedula = this.value;
+                const concejalRadio = document.getElementById('concejal_' + cedula);
+                
+                if (!this.checked && concejalRadio.checked) {
+                    // Si se deselecciona un asistente que era Concejal, limpiar selección de Concejal
+                    concejalRadio.checked = false;
+                }
+            });
+        });
+        
+        // Cuando se selecciona un Concejal, asegurar que también esté marcado como asistente
+        concejalRadios.forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const cedula = this.value;
+                    const asistenteCheckbox = document.getElementById('asistente_' + cedula);
+                    
+                    // Asegurar que el Concejal también esté marcado como asistente
+                    if (!asistenteCheckbox.checked) {
+                        asistenteCheckbox.checked = true;
+                    }
+                }
+            });
+        });
+    });
+</script>
+
 <div class="py-4 text-right">
     <a href="{{ route('dashboard.reuniones.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
         Cancelar
