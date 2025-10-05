@@ -58,15 +58,65 @@
 
     <div class="md:col-span-2">
         <label for="asistentes" class="block text-sm font-medium text-gray-700">Asistentes</label>
-        <select name="asistentes[]" id="asistentes" multiple class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <div class="mt-1 border border-gray-300 rounded-lg p-4 max-h-60 overflow-y-auto bg-white">
             @foreach($personas as $persona)
-                <option value="{{ $persona->id }}" {{ (isset($reunion) && $reunion->asistentes->contains($persona->id)) ? 'selected' : '' }}>
-                    {{ $persona->nombre }} {{ $persona->apellido }}
-                </option>
+                <div class="flex items-center justify-between py-2 px-2 hover:bg-gray-50 rounded">
+                    <div class="flex items-center">
+                        <input type="checkbox" 
+                               name="asistentes[]" 
+                               value="{{ $persona->cedula }}" 
+                               id="asistente_{{ $persona->cedula }}"
+                               class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                               {{ (isset($reunion) && $reunion->asistentes->contains('cedula', $persona->cedula)) ? 'checked' : '' }}>
+                        <label for="asistente_{{ $persona->cedula }}" class="text-sm text-gray-900 cursor-pointer">
+                            {{ $persona->nombre }} {{ $persona->apellido }} 
+                            <span class="text-gray-500 text-xs">({{ $persona->cedula }})</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" 
+                               name="concejal" 
+                               value="{{ $persona->cedula }}" 
+                               id="concejal_{{ $persona->cedula }}"
+                               class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
+                               {{ (isset($reunion) && $reunion->concejal() && $reunion->concejal()->cedula === $persona->cedula) ? 'checked' : '' }}>
+                        <label for="concejal_{{ $persona->cedula }}" class="ml-1 text-xs text-green-600 cursor-pointer">Concejal</label>
+                    </div>
+                </div>
             @endforeach
-        </select>
-        <p class="text-xs text-gray-500 mt-1">Mantén presionado Ctrl (o Cmd en Mac) para seleccionar múltiples asistentes.</p>
+        </div>
+        <div class="flex justify-between mt-2">
+            <p class="text-xs text-gray-500">Selecciona los asistentes y marca uno como Concejal.</p>
+            <div class="flex items-center text-xs text-gray-500">
+                <span class="inline-block w-3 h-3 bg-blue-100 border border-blue-300 rounded mr-1"></span>
+                <span class="mr-3">Asistente</span>
+                <span class="inline-block w-3 h-3 bg-green-100 border border-green-300 rounded mr-1"></span>
+                <span>Concejal</span>
+            </div>
+        </div>
         @error('asistentes')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
+        @error('concejal')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div class="md:col-span-2">
+        <label for="nuevo_estado_solicitud" class="block text-sm font-medium text-gray-700">Actualizar Estado de Solicitud (Opcional)</label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                <i class='bx bx-sync'></i>
+            </span>
+            <input type="text" 
+                   name="nuevo_estado_solicitud" 
+                   id="nuevo_estado_solicitud" 
+                   class="flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                   placeholder="Ej: En proceso: Acuerdo de ejecución"
+                   value="{{ old('nuevo_estado_solicitud') }}">
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Si especifica un nuevo estado, se actualizará el estado detallado de la solicitud asociada.</p>
+        @error('nuevo_estado_solicitud')
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
     </div>
