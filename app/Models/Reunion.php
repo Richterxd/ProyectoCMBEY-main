@@ -55,6 +55,16 @@ class Reunion extends Model
      */
     public function asistentes(): BelongsToMany
     {
-        return $this->belongsToMany(Persona::class, 'persona_reunion');
+        return $this->belongsToMany(Personas::class, 'persona_reunion', 'reunion_id', 'persona_cedula', 'id', 'cedula')
+                    ->withPivot('es_concejal')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get the Concejal for this reunion.
+     */
+    public function concejal()
+    {
+        return $this->asistentes()->wherePivot('es_concejal', true)->first();
     }
 }
