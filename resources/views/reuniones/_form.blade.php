@@ -543,261 +543,465 @@ document.addEventListener('DOMContentLoaded', function() {
     // Elementos del formulario
     const titulo = document.getElementById('titulo');
     const fechaReunion = document.getElementById('fecha_reunion');
+    const ubicacion = document.getElementById('ubicacion');
+    const descripcion = document.getElementById('descripcion');
     const solicitudId = document.getElementById('solicitud_id');
     const institucionId = document.getElementById('institucion_id');
-    const asistentesCheckboxes = document.querySelectorAll('input[name="asistentes[]"]');
-    const concejalRadios = document.querySelectorAll('input[name="concejal"]');
+    const nuevoEstadoSolicitud = document.getElementById('nuevo_estado_solicitud');
+    const participantsSearch = document.getElementById('participants-search');
     
-    // ===== VALIDACIONES EN TIEMPO REAL =====
+    // Contadores y elementos reactivos
+    const formSections = {
+        'basic-info': { status: document.getElementById('basic-info-status'), isValid: false },
+        'relations': { status: document.getElementById('relations-status'), isValid: false },
+        'participants': { status: document.getElementById('participants-status'), isValid: false }
+    };
     
-    // Validar título
-    titulo.addEventListener('input', function() {
-        validateField(this, 'titulo', {
+    // ===== SISTEMA DE VALIDACIÓN REACTIVA =====
+    
+    function initializeValidationSystem() {
+        // Configurar validaciones para cada campo
+        setupFieldValidation(titulo, 'titulo', {
             required: true,
             minLength: 5,
+            maxLength: 255,
+            section: 'basic-info'
+        });
+        
+        setupFieldValidation(fechaReunion, 'fecha', {
+            required: true,
+            futureDate: true,
+            section: 'basic-info'
+        });
+        
+        setupFieldValidation(ubicacion, 'text', {
+            maxLength: 255,
+            section: 'basic-info'
+        });
+        
+        setupFieldValidation(descripcion, 'textarea', {
+            maxLength: 1000,
+            section: 'basic-info'
+        });
+        
+        setupFieldValidation(solicitudId, 'select', {
+            required: true,
+            section: 'relations'
+        });
+        
+        setupFieldValidation(institucionId, 'select', {
+            required: true,
+            section: 'relations'
+        });
+        
+        setupFieldValidation(nuevoEstadoSolicitud, 'text', {
             maxLength: 255
         });
-    });
+        
+        // Configurar contadores de caracteres
+        setupCharacterCounter(titulo, 255);
+        setupCharacterCounter(ubicacion, 255);
+        setupCharacterCounter(descripcion, 1000);
+        setupCharacterCounter(nuevoEstadoSolicitud, 255);
+    }
     
-    // Validar fecha
-    fechaReunion.addEventListener('change', function() {
-        validateField(this, 'fecha', {
-            required: true,
-            futureDate: true
-        });
-    });
-    
-    // Validar selects
-    [solicitudId, institucionId].forEach(select => {
-        select.addEventListener('change', function() {
-            validateField(this, 'select', {
-                required: true
+    function setupFieldValidation(field, type, rules) {
+        if (!field) return;
+        
+        const events = ['input', 'change', 'blur'];
+        events.forEach(event => {
+            field.addEventListener(event, function() {
+                validateField(this, type, rules);
             });
         });
-    });
+        
+        // Validación inicial si tiene valor
+        if (field.value.trim()) {
+            validateField(field, type, rules);
+        }
+    }
     
-    // ===== LÓGICA DE ASISTENTES Y CONCEJAL =====
-    
-    // Manejar selección de asistentes
-    asistentesCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            const cedula = this.value;
-            const concejalRadio = document.getElementById('concejal_' + cedula);
+    function setupCharacterCounter(field, maxLength) {
+        if (!field) return;
+        
+        const counter = document.getElementById(field.id + '-counter');
+        if (!counter) return;
+        
+        function updateCounter() {
+            const currentLength = field.value.length;
+            counter.textContent = `${currentLength}/${maxLength}`;
             
-            // Si se deselecciona un asistente que era concejal
-            if (!this.checked && concejalRadio && concejalRadio.checked) {
-                concejalRadio.checked = false;
-                showNotification('El concejal fue removido de la selección', 'warning');
+            if (currentLength > maxLength * 0.8) {
+                counter.classList.add('text-yellow-600');
+                counter.classList.remove('text-gray-400');
+            } else {
+                counter.classList.remove('text-yellow-600');
+                counter.classList.add('text-gray-400');
             }
             
-            // Actualizar contador de asistentes
-            updateAsistentesCounter();
-            validateAsistentes();
-        });
-    });
-    
-    // Manejar selección de concejal
-    concejalRadios.forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            if (this.checked) {
-                const cedula = this.value;
-                const asistenteCheckbox = document.getElementById('asistente_' + cedula);
-                
-                // Auto-seleccionar como asistente si no está seleccionado
-                if (!asistenteCheckbox.checked) {
-                    asistenteCheckbox.checked = true;
-                    showNotification('Concejal agregado automáticamente como asistente', 'success');
-                }
-                
-                updateAsistentesCounter();
+            if (currentLength > maxLength) {
+                counter.classList.add('text-red-600');
+                counter.classList.remove('text-yellow-600');
             }
-        });
-    });
-    
-    // ===== FUNCIONES DE VALIDACIÓN =====
+        }
+        
+        field.addEventListener('input', updateCounter);
+        updateCounter(); // Inicial
+    }
     
     function validateField(field, type, rules) {
         const value = field.value.trim();
-        const fieldGroup = field.closest('.form-group');
+        const messagesContainer = document.getElementById(field.id + '-messages');
+        let isValid = true;
+        let message = '';
         
         // Limpiar mensajes previos
-        clearFieldMessages(fieldGroup);
+        if (messagesContainer) {
+            const existingMessages = messagesContainer.querySelectorAll('.error-message, .success-message, .warning-message');
+            existingMessages.forEach(msg => msg.remove());
+        }
         
-        // Validación requerido
+        // Validar según las reglas
         if (rules.required && !value) {
-            setFieldError(field, fieldGroup, 'Este campo es obligatorio');
-            return false;
+            isValid = false;
+            message = 'Este campo es obligatorio';
+        } else if (rules.minLength && value && value.length < rules.minLength) {
+            isValid = false;
+            message = `Mínimo ${rules.minLength} caracteres`;
+        } else if (rules.maxLength && value.length > rules.maxLength) {
+            isValid = false;
+            message = `Máximo ${rules.maxLength} caracteres`;
+        } else if (rules.futureDate && value) {
+            const selectedDate = new Date(value);
+            const now = new Date();
+            if (selectedDate <= now) {
+                isValid = false;
+                message = 'La fecha debe ser futura';
+            }
         }
         
-        // Validaciones específicas por tipo
-        switch(type) {
-            case 'titulo':
-                if (rules.minLength && value.length < rules.minLength) {
-                    setFieldError(field, fieldGroup, `Mínimo ${rules.minLength} caracteres`);
-                    return false;
-                }
-                if (rules.maxLength && value.length > rules.maxLength) {
-                    setFieldError(field, fieldGroup, `Máximo ${rules.maxLength} caracteres`);
-                    return false;
-                }
+        // Actualizar estado visual del campo
+        updateFieldState(field, isValid, message);
+        
+        // Actualizar estado de la sección
+        if (rules.section && formSections[rules.section]) {
+            updateSectionStatus(rules.section);
+        }
+        
+        return isValid;
+    }
+    
+    function updateFieldState(field, isValid, message) {
+        field.classList.remove('error', 'success', 'loading');
+        
+        if (!field.value.trim() && !message) {
+            // Campo vacío sin error
+            return;
+        }
+        
+        if (isValid && field.value.trim()) {
+            field.classList.add('success');
+            // Mostrar mensaje de éxito brevemente
+            setTimeout(() => field.classList.remove('success'), 2000);
+        } else if (!isValid) {
+            field.classList.add('error');
+            
+            // Mostrar mensaje de error
+            const messagesContainer = document.getElementById(field.id + '-messages');
+            if (messagesContainer && message) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.innerHTML = `<i class='bx bx-error-circle'></i><span>${message}</span>`;
+                messagesContainer.appendChild(errorDiv);
+            }
+        }
+    }
+    
+    function updateSectionStatus(sectionName) {
+        const section = formSections[sectionName];
+        if (!section || !section.status) return;
+        
+        let isValid = false;
+        
+        switch(sectionName) {
+            case 'basic-info':
+                isValid = validateBasicInfoSection();
                 break;
+            case 'relations':
+                isValid = validateRelationsSection();
+                break;
+            case 'participants':
+                isValid = validateParticipantsSection();
+                break;
+        }
+        
+        section.isValid = isValid;
+        section.status.className = `w-3 h-3 rounded-full ${isValid ? 'bg-green-500' : 'bg-gray-300'}`;
+    }
+    
+    function validateBasicInfoSection() {
+        return titulo.value.trim().length >= 5 && 
+               fechaReunion.value && 
+               new Date(fechaReunion.value) > new Date();
+    }
+    
+    function validateRelationsSection() {
+        return solicitudId.value && institucionId.value;
+    }
+    
+    function validateParticipantsSection() {
+        const selectedParticipants = document.querySelectorAll('input[name="asistentes[]"]:checked');
+        return selectedParticipants.length > 0; // Al menos un participante
+    }
+    
+    // ===== SISTEMA DE PARTICIPANTES =====
+    
+    function initializeParticipantsSystem() {
+        setupParticipantsSearch();
+        setupParticipantsSelection();
+        setupStatusSuggestions();
+        updateParticipantsDisplay();
+    }
+    
+    function setupParticipantsSearch() {
+        if (!participantsSearch) return;
+        
+        participantsSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const participantCards = document.querySelectorAll('.participant-card');
+            let visibleCount = 0;
+            
+            participantCards.forEach(card => {
+                const name = card.dataset.name || '';
+                const cedula = card.dataset.cedula || '';
+                const isVisible = name.includes(searchTerm) || cedula.includes(searchTerm);
                 
-            case 'fecha':
-                if (rules.futureDate && value) {
-                    const selectedDate = new Date(value);
-                    const now = new Date();
-                    if (selectedDate <= now) {
-                        setFieldError(field, fieldGroup, 'La fecha debe ser futura');
-                        return false;
+                card.style.display = isVisible ? 'flex' : 'none';
+                if (isVisible) visibleCount++;
+            });
+            
+            const noResultsDiv = document.getElementById('no-participants-found');
+            if (noResultsDiv) {
+                noResultsDiv.classList.toggle('hidden', visibleCount > 0);
+            }
+        });
+    }
+    
+    function setupParticipantsSelection() {
+        const participantCheckboxes = document.querySelectorAll('.participant-checkbox');
+        const concejalRadios = document.querySelectorAll('.concejal-radio');
+        
+        // Manejar selección de participantes
+        participantCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const cedula = this.dataset.cedula;
+                const card = document.getElementById('participant-card-' + cedula);
+                const concejalRadio = document.querySelector(`.concejal-radio[data-cedula="${cedula}"]`);
+                
+                // Actualizar visual de la card
+                if (card) {
+                    card.classList.toggle('selected', this.checked);
+                }
+                
+                // Si se deselecciona un participante que era concejal
+                if (!this.checked && concejalRadio && concejalRadio.checked) {
+                    concejalRadio.checked = false;
+                    showNotification('El concejal fue removido de la selección', 'warning');
+                    updateConcejalVisual();
+                }
+                
+                updateParticipantsDisplay();
+                updateSectionStatus('participants');
+            });
+        });
+        
+        // Manejar selección de concejal
+        concejalRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const cedula = this.dataset.cedula;
+                    const checkbox = document.querySelector(`.participant-checkbox[data-cedula="${cedula}"]`);
+                    
+                    // Auto-seleccionar como participante
+                    if (checkbox && !checkbox.checked) {
+                        checkbox.checked = true;
+                        checkbox.dispatchEvent(new Event('change'));
+                        showNotification('Concejal agregado automáticamente como participante', 'success');
                     }
+                    
+                    updateConcejalVisual();
+                    updateParticipantsDisplay();
                 }
-                break;
-                
-            case 'select':
-                if (rules.required && !value) {
-                    setFieldError(field, fieldGroup, 'Debe seleccionar una opción');
-                    return false;
-                }
-                break;
-        }
-        
-        // Campo válido
-        setFieldSuccess(field, fieldGroup);
-        return true;
+            });
+        });
     }
     
-    function validateAsistentes() {
-        const selectedAsistentes = document.querySelectorAll('input[name="asistentes[]"]:checked');
-        const asistenteContainer = document.querySelector('input[name="asistentes[]"]').closest('.form-group');
+    function updateConcejalVisual() {
+        const cards = document.querySelectorAll('.participant-card');
+        cards.forEach(card => {
+            card.classList.remove('concejal');
+        });
         
-        if (selectedAsistentes.length === 0) {
-            // No mostrar error si no hay asistentes (es opcional)
-            return true;
-        }
-        
-        return true;
-    }
-    
-    function setFieldError(field, fieldGroup, message) {
-        field.classList.remove('success');
-        field.classList.add('error');
-        
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.innerHTML = `<i class='bx bx-error-circle'></i><span>${message}</span>`;
-        fieldGroup.appendChild(errorDiv);
-    }
-    
-    function setFieldSuccess(field, fieldGroup) {
-        field.classList.remove('error');
-        field.classList.add('success');
-        
-        const successDiv = document.createElement('div');
-        successDiv.className = 'success-message';
-        successDiv.innerHTML = `<i class='bx bx-check-circle'></i><span>Válido</span>`;
-        fieldGroup.appendChild(successDiv);
-        
-        // Auto-remover mensaje de éxito después de 2 segundos
-        setTimeout(() => {
-            if (successDiv.parentNode) {
-                successDiv.remove();
-                field.classList.remove('success');
+        const selectedConcejal = document.querySelector('.concejal-radio:checked');
+        if (selectedConcejal) {
+            const cedula = selectedConcejal.dataset.cedula;
+            const card = document.getElementById('participant-card-' + cedula);
+            if (card) {
+                card.classList.add('concejal');
             }
-        }, 2000);
+        }
     }
     
-    function clearFieldMessages(fieldGroup) {
-        const messages = fieldGroup.querySelectorAll('.error-message, .success-message');
-        messages.forEach(msg => msg.remove());
-    }
-    
-    // ===== FUNCIONES AUXILIARES =====
-    
-    function updateAsistentesCounter() {
-        const selectedCount = document.querySelectorAll('input[name="asistentes[]"]:checked').length;
-        const concejalSelected = document.querySelector('input[name="concejal"]:checked');
+    function updateParticipantsDisplay() {
+        const selectedParticipants = document.querySelectorAll('.participant-checkbox:checked');
+        const selectedConcejal = document.querySelector('.concejal-radio:checked');
+        const counter = document.getElementById('participants-counter');
+        const summary = document.getElementById('selection-summary');
+        const summaryDetails = document.getElementById('selection-details');
         
-        // Actualizar contador visual (si existe)
-        const counter = document.querySelector('#asistentes-counter');
         if (counter) {
-            counter.textContent = `${selectedCount} asistente(s) seleccionado(s)`;
-            if (concejalSelected) {
-                counter.textContent += ' (1 concejal designado)';
+            counter.textContent = `${selectedParticipants.length} seleccionados`;
+        }
+        
+        if (summary && summaryDetails) {
+            if (selectedParticipants.length > 0) {
+                summary.classList.remove('hidden');
+                
+                let details = `<strong>${selectedParticipants.length}</strong> participante(s) seleccionado(s)`;
+                if (selectedConcejal) {
+                    const concejalName = selectedConcejal.closest('.participant-card').querySelector('label .font-medium').textContent;
+                    details += `<br><strong>Concejal responsable:</strong> ${concejalName}`;
+                }
+                
+                summaryDetails.innerHTML = details;
+            } else {
+                summary.classList.add('hidden');
             }
         }
     }
     
-    function showNotification(message, type = 'info') {
-        // Crear notificación toast
+    function setupStatusSuggestions() {
+        const suggestions = document.querySelectorAll('.status-suggestion');
+        suggestions.forEach(button => {
+            button.addEventListener('click', function() {
+                const status = this.dataset.status;
+                if (nuevoEstadoSolicitud) {
+                    nuevoEstadoSolicitud.value = status;
+                    nuevoEstadoSolicitud.dispatchEvent(new Event('input'));
+                    showNotification('Estado sugerido aplicado', 'success');
+                }
+            });
+        });
+    }
+    
+    // ===== SISTEMA DE NOTIFICACIONES =====
+    
+    function showNotification(message, type = 'info', duration = 3000) {
         const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
+        toast.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full max-w-sm`;
         
         const typeClasses = {
             success: 'bg-green-500 text-white',
             error: 'bg-red-500 text-white',
-            warning: 'bg-yellow-500 text-white',
+            warning: 'bg-yellow-500 text-black',
             info: 'bg-blue-500 text-white'
+        };
+        
+        const icons = {
+            success: 'bx-check-circle',
+            error: 'bx-x-circle',
+            warning: 'bx-error',
+            info: 'bx-info-circle'
         };
         
         toast.className += ` ${typeClasses[type]}`;
         toast.innerHTML = `
             <div class="flex items-center">
-                <i class='bx bx-${type === 'success' ? 'check' : type === 'error' ? 'x' : type === 'warning' ? 'error' : 'info'}-circle mr-2'></i>
-                <span>${message}</span>
+                <i class='bx ${icons[type]} mr-2'></i>
+                <span class="text-sm font-medium">${message}</span>
+                <button class="ml-3 hover:opacity-75" onclick="this.parentElement.parentElement.remove()">
+                    <i class='bx bx-x'></i>
+                </button>
             </div>
         `;
         
         document.body.appendChild(toast);
         
         // Mostrar
-        setTimeout(() => {
-            toast.classList.remove('translate-x-full');
-        }, 100);
+        setTimeout(() => toast.classList.remove('translate-x-full'), 100);
         
-        // Ocultar y remover
+        // Auto-ocultar
         setTimeout(() => {
             toast.classList.add('translate-x-full');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+            setTimeout(() => {
+                if (toast.parentNode) toast.remove();
+            }, 300);
+        }, duration);
     }
     
     // ===== VALIDACIÓN Y ENVÍO DEL FORMULARIO =====
     
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validar todos los campos
-        let isValid = true;
-        
-        isValid &= validateField(titulo, 'titulo', {required: true, minLength: 5, maxLength: 255});
-        isValid &= validateField(fechaReunion, 'fecha', {required: true, futureDate: true});
-        isValid &= validateField(solicitudId, 'select', {required: true});
-        isValid &= validateField(institucionId, 'select', {required: true});
-        isValid &= validateAsistentes();
-        
-        if (isValid) {
-            // Mostrar loading
+    function setupFormSubmission() {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar todas las secciones
+            const isBasicValid = validateBasicInfoSection();
+            const isRelationsValid = validateRelationsSection();
+            const isParticipantsValid = validateParticipantsSection();
+            
+            // Actualizar estados visuales
+            updateSectionStatus('basic-info');
+            updateSectionStatus('relations');
+            updateSectionStatus('participants');
+            
+            if (!isBasicValid) {
+                showNotification('Complete la información básica correctamente', 'error');
+                titulo.focus();
+                return;
+            }
+            
+            if (!isRelationsValid) {
+                showNotification('Seleccione la solicitud e institución asociadas', 'error');
+                solicitudId.focus();
+                return;
+            }
+            
+            if (!isParticipantsValid) {
+                showNotification('Debe seleccionar al menos un participante', 'warning');
+                document.querySelector('.participant-checkbox').focus();
+                return;
+            }
+            
+            // Envío exitoso
             submitButton.disabled = true;
-            submitText.textContent = 'Guardando...';
+            submitText.textContent = 'Guardando reunión...';
             submitSpinner.classList.remove('hidden');
             
-            // Enviar formulario
+            showNotification('Guardando reunión...', 'info');
+            
             setTimeout(() => {
-                form.submit();
+                this.submit();
             }, 500);
-        } else {
-            showNotification('Por favor, corrija los errores en el formulario', 'error');
-        }
-    });
+        });
+    }
     
-    // ===== INICIALIZACIÓN =====
-    updateAsistentesCounter();
+    // ===== INICIALIZACIÓN GENERAL =====
     
-    // Auto-validar campos al cargar si tienen valor
-    [titulo, fechaReunion, solicitudId, institucionId].forEach(field => {
-        if (field.value.trim()) {
-            field.dispatchEvent(new Event(field.type === 'select-one' ? 'change' : 'input'));
-        }
-    });
+    function initialize() {
+        initializeValidationSystem();
+        initializeParticipantsSystem();
+        setupFormSubmission();
+        
+        // Validar estado inicial
+        Object.keys(formSections).forEach(sectionName => {
+            updateSectionStatus(sectionName);
+        });
+        
+        showNotification('Formulario cargado correctamente', 'success', 2000);
+    }
+    
+    // Inicializar cuando todo esté listo
+    initialize();
 });
 </script>
