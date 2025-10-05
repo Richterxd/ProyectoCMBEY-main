@@ -18,3 +18,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+-e 
+# Environment files
+*.env
+*.env.*
