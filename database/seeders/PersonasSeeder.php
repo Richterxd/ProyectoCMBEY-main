@@ -13,7 +13,7 @@ class PersonasSeeder extends Seeder
      */
     public function run(): void
     {
-        Persona::updateOrCreate(
+        Personas::updateOrCreate(
             ['cedula' => 1234567],
             [
                 'nombre' => 'María',
@@ -29,7 +29,7 @@ class PersonasSeeder extends Seeder
             ]
         );
 
-        Persona::updateOrCreate(
+        Personas::updateOrCreate(
             ['cedula' => 29970399],
             [
                 'nombre' => 'Carlos',
@@ -45,7 +45,7 @@ class PersonasSeeder extends Seeder
             ]
         );
 
-        Persona::updateOrCreate(
+        Personas::updateOrCreate(
             ['cedula' => 12345678],
             [
                 'nombre' => 'Ana',
