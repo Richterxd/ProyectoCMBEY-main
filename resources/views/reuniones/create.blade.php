@@ -239,12 +239,517 @@
         }
     </style>
     
+    <!-- Enhanced Styles -->
+    <style>
+        /* Enhanced animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            }
+        }
+        
+        @keyframes step-complete {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-slideInUp { animation: slideInUp 0.6s ease-out; }
+        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
+        .animate-step-complete { animation: step-complete 0.5s ease-out; }
+        
+        /* Step indicators */
+        .step-indicator.active {
+            background: linear-gradient(135deg, #3b82f6, #1e40af) !important;
+            color: white !important;
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .step-indicator.completed {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: white !important;
+        }
+        
+        .step-title.active {
+            color: #3b82f6 !important;
+            font-weight: bold;
+        }
+        
+        .step-title.completed {
+            color: #10b981 !important;
+            font-weight: bold;
+        }
+        
+        /* Form enhancements */
+        .form-section {
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .form-section.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .form-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Mobile responsive enhancements */
+        @media (max-width: 640px) {
+            .step-indicator {
+                width: 2.5rem !important;
+                height: 2.5rem !important;
+            }
+            
+            .flex.items-center.space-x-8 {
+                space-x: 1rem;
+            }
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f4f6;
+            border-top: 6px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="bg-white rounded-2xl p-8 shadow-2xl">
+            <div class="flex flex-col items-center">
+                <div class="loading-spinner"></div>
+                <p class="mt-4 text-gray-600 font-medium">Creando reunión...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced JavaScript -->
     <script>
-        // Añadir animación al cargar
         document.addEventListener('DOMContentLoaded', function() {
-            const mainForm = document.querySelector('.bg-white.rounded-2xl');
-            if (mainForm) {
-                mainForm.classList.add('animate-slideInUp');
+            // ===== INITIALIZATION =====
+            initializeAnimations();
+            initializeFormProgress();
+            initializeEnhancedValidation();
+            initializeFormSections();
+            initializeQuickFill();
+            
+            // ===== ANIMATION SYSTEM =====
+            function initializeAnimations() {
+                const mainForm = document.querySelector('.bg-white.rounded-2xl');
+                if (mainForm) {
+                    mainForm.classList.add('animate-slideInUp');
+                }
+                
+                // Animate form sections
+                const sections = document.querySelectorAll('.card-section');
+                sections.forEach((section, index) => {
+                    setTimeout(() => {
+                        section.classList.add('form-section', 'visible');
+                    }, index * 200);
+                });
+                
+                // Animate stats cards on load
+                animateStatsCards();
+            }
+            
+            function animateStatsCards() {
+                const statsCards = document.querySelectorAll('.bg-gradient-to-br');
+                statsCards.forEach((card, index) => {
+                    card.style.transform = 'translateY(20px)';
+                    card.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.5s ease';
+                        card.style.transform = 'translateY(0)';
+                        card.style.opacity = '1';
+                    }, index * 100);
+                });
+            }
+            
+            // ===== FORM PROGRESS SYSTEM =====
+            function initializeFormProgress() {
+                updateProgressStep(1); // Start at step 1
+                
+                // Listen for form changes
+                const form = document.getElementById('reunionForm');
+                if (form) {
+                    form.addEventListener('input', updateFormProgress);
+                    form.addEventListener('change', updateFormProgress);
+                }
+            }
+            
+            function updateFormProgress() {
+                const step1Complete = validateBasicInfo();
+                const step2Complete = validateRelations();
+                const step3Complete = validateParticipants();
+                
+                if (step1Complete && !step2Complete && !step3Complete) {
+                    updateProgressStep(2);
+                } else if (step1Complete && step2Complete && !step3Complete) {
+                    updateProgressStep(3);
+                } else if (step1Complete && step2Complete && step3Complete) {
+                    updateProgressStep(4);
+                } else {
+                    updateProgressStep(1);
+                }
+            }
+            
+            function updateProgressStep(step) {
+                // Update step indicators
+                for (let i = 1; i <= 4; i++) {
+                    const indicator = document.querySelector(`[data-step="${i}"]`);
+                    const title = document.querySelector(`.step-title[data-step="${i}"]`);
+                    const check = document.getElementById(`check${i}`);
+                    const progress = document.getElementById(`progress${i}`);
+                    
+                    if (indicator) {
+                        indicator.classList.remove('active', 'completed');
+                        if (title) title.classList.remove('active', 'completed');
+                        if (check) check.classList.add('hidden');
+                        
+                        if (i < step) {
+                            indicator.classList.add('completed');
+                            if (title) title.classList.add('completed');
+                            if (check) {
+                                check.classList.remove('hidden');
+                                check.classList.add('flex');
+                            }
+                        } else if (i === step) {
+                            indicator.classList.add('active');
+                            if (title) title.classList.add('active');
+                        }
+                    }
+                    
+                    if (progress) {
+                        if (i < step) {
+                            progress.style.transform = 'translateX(0)';
+                        } else {
+                            progress.style.transform = 'translateX(-100%)';
+                        }
+                    }
+                }
+                
+                // Update overall progress bar
+                const overallProgress = document.getElementById('overallProgress');
+                if (overallProgress) {
+                    const percentage = ((step - 1) / 3) * 100;
+                    overallProgress.style.transform = `translateX(-${100 - percentage}%)`;
+                }
+            }
+            
+            function validateBasicInfo() {
+                const titulo = document.getElementById('titulo');
+                const fechaReunion = document.getElementById('fecha_reunion');
+                
+                return titulo && titulo.value.trim().length >= 5 &&
+                       fechaReunion && fechaReunion.value &&
+                       new Date(fechaReunion.value) > new Date();
+            }
+            
+            function validateRelations() {
+                const solicitudId = document.getElementById('solicitud_id');
+                const institucionId = document.getElementById('institucion_id');
+                
+                return solicitudId && solicitudId.value &&
+                       institucionId && institucionId.value;
+            }
+            
+            function validateParticipants() {
+                const checkedParticipants = document.querySelectorAll('input[name="asistentes[]"]:checked');
+                return checkedParticipants.length > 0;
+            }
+            
+            // ===== ENHANCED VALIDATION =====
+            function initializeEnhancedValidation() {
+                const inputs = document.querySelectorAll('.form-input');
+                inputs.forEach(input => {
+                    input.addEventListener('focus', function() {
+                        this.classList.add('animate-pulse-glow');
+                    });
+                    
+                    input.addEventListener('blur', function() {
+                        this.classList.remove('animate-pulse-glow');
+                        validateFieldRealTime(this);
+                    });
+                    
+                    input.addEventListener('input', function() {
+                        clearTimeout(this.validationTimeout);
+                        this.validationTimeout = setTimeout(() => {
+                            validateFieldRealTime(this);
+                        }, 500);
+                    });
+                });
+            }
+            
+            function validateFieldRealTime(field) {
+                const value = field.value.trim();
+                const fieldName = field.name || field.id;
+                let isValid = true;
+                let message = '';
+                
+                // Field-specific validation
+                switch (fieldName) {
+                    case 'titulo':
+                        if (!value) {
+                            isValid = false;
+                            message = 'El título es obligatorio';
+                        } else if (value.length < 5) {
+                            isValid = false;
+                            message = 'El título debe tener al menos 5 caracteres';
+                        }
+                        break;
+                    case 'fecha_reunion':
+                        if (!value) {
+                            isValid = false;
+                            message = 'La fecha es obligatoria';
+                        } else if (new Date(value) <= new Date()) {
+                            isValid = false;
+                            message = 'La fecha debe ser futura';
+                        }
+                        break;
+                    case 'solicitud_id':
+                    case 'institucion_id':
+                        if (!value) {
+                            isValid = false;
+                            message = 'Este campo es obligatorio';
+                        }
+                        break;
+                }
+                
+                showFieldFeedback(field, isValid, message);
+            }
+            
+            function showFieldFeedback(field, isValid, message) {
+                // Remove existing classes
+                field.classList.remove('error', 'success');
+                
+                // Add appropriate class
+                if (isValid && field.value.trim()) {
+                    field.classList.add('success');
+                    showToast('Campo válido', 'success', 1000);
+                } else if (!isValid) {
+                    field.classList.add('error');
+                    if (message) {
+                        showToast(message, 'error', 3000);
+                    }
+                }
+            }
+            
+            // ===== FORM SECTIONS MANAGEMENT =====
+            function initializeFormSections() {
+                const sections = document.querySelectorAll('.card-section');
+                sections.forEach(section => {
+                    section.classList.add('form-section');
+                });
+                
+                // Show first section immediately
+                setTimeout(() => {
+                    sections[0]?.classList.add('visible');
+                }, 100);
+            }
+            
+            // ===== QUICK FILL FUNCTIONALITY =====
+            function initializeQuickFill() {
+                // Add quick fill buttons for testing
+                if (window.location.hostname === 'localhost' || window.location.hostname.includes('dev')) {
+                    addQuickFillButton();
+                }
+            }
+            
+            function addQuickFillButton() {
+                const header = document.querySelector('.flex.items-center.space-x-4');
+                if (header) {
+                    const quickFillBtn = document.createElement('button');
+                    quickFillBtn.type = 'button';
+                    quickFillBtn.className = 'px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all duration-200 text-sm';
+                    quickFillBtn.innerHTML = '<i class="bx bx-zap mr-2"></i>Llenar Rápido';
+                    quickFillBtn.onclick = quickFillForm;
+                    header.appendChild(quickFillBtn);
+                }
+            }
+            
+            function quickFillForm() {
+                Swal.fire({
+                    title: 'Llenar formulario automáticamente',
+                    text: '¿Desea llenar el formulario con datos de prueba?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, llenar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Fill form with test data
+                        const titulo = document.getElementById('titulo');
+                        const fechaReunion = document.getElementById('fecha_reunion');
+                        const ubicacion = document.getElementById('ubicacion');
+                        const descripcion = document.getElementById('descripcion');
+                        const solicitudId = document.getElementById('solicitud_id');
+                        const institucionId = document.getElementById('institucion_id');
+                        
+                        if (titulo) titulo.value = 'Reunión de Seguimiento Ejemplo';
+                        if (fechaReunion) {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            fechaReunion.value = tomorrow.toISOString().slice(0, 16);
+                        }
+                        if (ubicacion) ubicacion.value = 'Sala de Reuniones Municipal';
+                        if (descripcion) descripcion.value = 'Reunión de seguimiento para revisar el progreso de las solicitudes pendientes.';
+                        
+                        // Select first options in dropdowns
+                        if (solicitudId && solicitudId.options.length > 1) {
+                            solicitudId.selectedIndex = 1;
+                        }
+                        if (institucionId && institucionId.options.length > 1) {
+                            institucionId.selectedIndex = 1;
+                        }
+                        
+                        // Select first participant
+                        const firstParticipant = document.querySelector('input[name="asistentes[]"]');
+                        if (firstParticipant) {
+                            firstParticipant.checked = true;
+                        }
+                        
+                        // Trigger change events
+                        [titulo, fechaReunion, ubicacion, descripcion, solicitudId, institucionId].forEach(field => {
+                            if (field) {
+                                field.dispatchEvent(new Event('input', { bubbles: true }));
+                                field.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                        });
+                        
+                        showToast('Formulario llenado automáticamente', 'success');
+                    }
+                });
+            }
+            
+            // ===== TOAST NOTIFICATION SYSTEM =====
+            function showToast(message, type = 'info', duration = 3000) {
+                const toast = document.createElement('div');
+                toast.className = `fixed top-4 right-4 p-4 rounded-xl shadow-2xl z-50 transition-all duration-300 transform translate-x-full max-w-sm`;
+                
+                const typeClasses = {
+                    success: 'bg-green-500 text-white',
+                    error: 'bg-red-500 text-white',
+                    warning: 'bg-yellow-500 text-black',
+                    info: 'bg-blue-500 text-white'
+                };
+                
+                const icons = {
+                    success: 'bx-check-circle',
+                    error: 'bx-x-circle',
+                    warning: 'bx-error',
+                    info: 'bx-info-circle'
+                };
+                
+                toast.className += ` ${typeClasses[type]}`;
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        <i class='bx ${icons[type]} mr-3 text-xl'></i>
+                        <span class="font-medium">${message}</span>
+                        <button class="ml-4 hover:opacity-75" onclick="this.parentElement.parentElement.remove()">
+                            <i class='bx bx-x text-xl'></i>
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Show animation
+                setTimeout(() => toast.classList.remove('translate-x-full'), 100);
+                
+                // Auto remove
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (toast.parentNode) toast.remove();
+                    }, 300);
+                }, duration);
+            }
+            
+            // ===== FORM SUBMISSION ENHANCEMENT =====
+            const form = document.getElementById('reunionForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Show loading
+                    document.getElementById('loadingOverlay').style.display = 'flex';
+                    
+                    // Validate all sections
+                    if (!validateBasicInfo()) {
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                        Swal.fire('Error', 'Complete correctamente la información básica', 'error');
+                        return;
+                    }
+                    
+                    if (!validateRelations()) {
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                        Swal.fire('Error', 'Seleccione la solicitud e institución asociadas', 'error');
+                        return;
+                    }
+                    
+                    if (!validateParticipants()) {
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                        Swal.fire('Error', 'Debe seleccionar al menos un participante', 'error');
+                        return;
+                    }
+                    
+                    // Success animation
+                    Swal.fire({
+                        title: 'Creando reunión...',
+                        text: 'Por favor espere mientras se procesa la información.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Submit after delay
+                    setTimeout(() => {
+                        this.submit();
+                    }, 1000);
+                });
             }
         });
     </script>
