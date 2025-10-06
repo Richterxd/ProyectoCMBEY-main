@@ -93,6 +93,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/dashboard/reuniones/{reunion}', [ReunionController::class, 'destroy'])
         ->name('dashboard.reuniones.destroy')
         ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion} - RUTA DE ELIMINACIÓN
+    
+    Route::get('/dashboard/reuniones/{reunion}/pdf', [ReunionController::class, 'generatePDF'])
+        ->name('dashboard.reuniones.pdf')
+        ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion}/pdf - RUTA DE PDF
 
     //usuario routes
 
