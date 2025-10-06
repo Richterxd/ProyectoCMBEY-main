@@ -1,0 +1,30 @@
+[
+  {
+    "test": "Authentication - CSRF Token",
+    "success": false,
+    "message": "Could not extract CSRF token from login page",
+    "details": {},
+    "timestamp": "2025-10-06T00:56:04.646424"
+  },
+  {
+    "test": "Database Integrity - Meeting Count",
+    "success": true,
+    "message": "Found 1 meetings in database",
+    "details": {},
+    "timestamp": "2025-10-06T00:56:04.830458"
+  },
+  {
+    "test": "Database Integrity - Relationships",
+    "success": true,
+    "message": "Relationships working - Solicitud: OK, Institucion: OK",
+    "details": {},
+    "timestamp": "2025-10-06T00:56:04.830484"
+  },
+  {
+    "test": "Database Integrity - Solicitud ID Type",
+    "success": true,
+    "message": "solicitud_id is correctly stored as string",
+    "details": {},
+    "timestamp": "2025-10-06T00:56:04.830489"
+  }
+]
