@@ -1,0 +1,103 @@
+[
+  {
+    "test": "Database Migration Status",
+    "success": true,
+    "message": "Migration for solicitud_id fix found",
+    "details": {
+      "stdout": "\n  Migration name .............................................. Batch / Status  \n  0001_01_01_000001_create_cache_table ............................... [1] Ran  \n  0001_01_01_000002_create_jobs_table ................................ [1] Ran  \n  2025_01_13_220000_create_security_questions_table .................. [1] Ran  \n  2025_01_14_000001_create_ambitos_table ............................. [1] Ran  \n  2025_01_14_000002_create_instituciones_table ....................... [1] Ran  \n  2025_06_11_221628_create_roles_table ............................... [1] Ran  \n  2025_07_01_073308_create_sectores_table ............................ [1] Ran  \n  2025_07_02_220714_create_trabajadores_table ........................ [1] Ran  \n  2025_07_05_152428_create_personas_table ............................ [1] Ran  \n  2026_01_01_000000_create_users_table ............................... [1] Ran  \n  2026_07_06_131254_rename_users_to_usuarios_table ................... [1] Ran  \n  2026_07_06_131255_create_solicitudes_table ......................... [1] Ran  \n  2026_07_06_131256_create_visitas_table ............................. [1] Ran  \n  2026_07_06_131257_create_solicitud_personas_asignadas_table ........ [1] Ran  \n  2026_07_06_131257_create_user_security_answers_table ............... [1] Ran  \n  2026_07_06_131258_create_reuniones_table ........................... [1] Ran  \n  2026_07_06_131259_create_persona_reunion_table ..................... [1] Ran  \n  2026_10_06_fix_reuniones_solicitud_id_type ......................... [1] Ran  \n\n",
+      "stderr": ""
+    },
+    "timestamp": "2025-10-06T00:54:44.989556"
+  },
+  {
+    "test": "Solicitudes Test Data",
+    "success": true,
+    "message": "Found 5 solicitudes",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.158329"
+  },
+  {
+    "test": "Instituciones Test Data",
+    "success": true,
+    "message": "Found 7 instituciones",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.325059"
+  },
+  {
+    "test": "Personas Test Data",
+    "success": true,
+    "message": "Found 5 personas",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.494452"
+  },
+  {
+    "test": "Login Page Access",
+    "success": true,
+    "message": "Login page accessible",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.512537"
+  },
+  {
+    "test": "Login Form Present",
+    "success": true,
+    "message": "Login form found on page",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.512693"
+  },
+  {
+    "test": "Route Protection - Meeting Index",
+    "success": true,
+    "message": "Route properly protected (status 302)",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.522362"
+  },
+  {
+    "test": "Route Protection - Meeting Create Form",
+    "success": true,
+    "message": "Route properly protected (status 302)",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.532292"
+  },
+  {
+    "test": "Model Relationships",
+    "success": true,
+    "message": "All Eloquent relationships properly defined",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:45.704838"
+  },
+  {
+    "test": "Meeting Creation",
+    "success": true,
+    "message": "Meeting created successfully via Eloquent",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:46.050086"
+  },
+  {
+    "test": "Meeting Relationships",
+    "success": true,
+    "message": "Relationships work correctly",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:46.050112"
+  },
+  {
+    "test": "Meeting Cleanup",
+    "success": true,
+    "message": "Test meeting cleaned up",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:46.050117"
+  },
+  {
+    "test": "Validation Rules Present",
+    "success": true,
+    "message": "All required validation rules found",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:46.214110"
+  },
+  {
+    "test": "Solicitud ID String Validation",
+    "success": true,
+    "message": "solicitud_id properly validated as string",
+    "details": {},
+    "timestamp": "2025-10-06T00:54:46.214138"
+  }
+]
