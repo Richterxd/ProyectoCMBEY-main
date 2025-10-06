@@ -4,6 +4,7 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Solicitud;
 use App\Models\Visita;
+use App\Models\Reunion;
 use App\Models\Ambito;
 use App\Models\User;
 use Livewire\Component;
