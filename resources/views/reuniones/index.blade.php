@@ -104,39 +104,54 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-100">
                                 @forelse ($reuniones as $reunion)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900">{{ $reunion->titulo }}</div>
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <td class="px-6 py-5 whitespace-nowrap">
+                                            <div class="space-y-1">
+                                                <div class="text-sm font-semibold text-gray-900">{{ $reunion->titulo }}</div>
                                                 @if($reunion->descripcion)
                                                     <div class="text-sm text-gray-500 truncate max-w-xs" title="{{ $reunion->descripcion }}">
                                                         {{ Str::limit($reunion->descripcion, 50) }}
                                                     </div>
                                                 @endif
+                                                @if($reunion->ubicacion)
+                                                    <div class="flex items-center text-xs text-gray-400">
+                                                        <i class='bx bx-map-pin mr-1'></i>
+                                                        {{ Str::limit($reunion->ubicacion, 30) }}
+                                                    </div>
+                                                @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $reunion->solicitud->titulo ?? 'N/A' }}</div>
-                                            @if($reunion->solicitud)
-                                                <div class="text-sm text-gray-500">ID: {{ $reunion->solicitud->solicitud_id }}</div>
-                                            @endif
+                                        <td class="px-6 py-5 whitespace-nowrap">
+                                            <div class="space-y-1">
+                                                <div class="text-sm font-medium text-gray-900">{{ $reunion->solicitud->titulo ?? 'N/A' }}</div>
+                                                @if($reunion->solicitud)
+                                                    <div class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md inline-block">
+                                                        ID: {{ $reunion->solicitud->solicitud_id }}
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</div>
+                                        <td class="px-6 py-5 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
-                                            <div class="text-sm text-gray-500">{{ $reunion->fecha_reunion->format('H:i') }}</div>
+                                        <td class="px-6 py-5 whitespace-nowrap">
+                                            <div class="space-y-1">
+                                                <div class="text-sm font-semibold text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
+                                                <div class="text-xs text-gray-500 bg-blue-50 px-2 py-0.5 rounded-md inline-block">
+                                                    <i class='bx bx-time mr-1'></i>{{ $reunion->fecha_reunion->format('H:i') }}
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <td class="px-6 py-5 whitespace-nowrap">
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800">
+                                                    <i class='bx bx-user mr-1'></i>
                                                     {{ $reunion->asistentes->count() }} personas
                                                 </span>
                                                 @if($reunion->concejal())
-                                                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800">
                                                         <i class='bx bx-star mr-1'></i>
                                                         Concejal
                                                     </span>
