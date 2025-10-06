@@ -62,7 +62,7 @@
         </div>
 
         <!-- Admin Management Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
             <button wire:click="setActiveTab('usuarios')"
                 class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
                 <div class="text-center">
@@ -73,27 +73,36 @@
             </button>
 
             <button wire:click="setActiveTab('solicitudes')"
-                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-purple-500">
                 <div class="text-center">
-                    <i class='bx bx-file-blank text-blue-600 text-3xl mr-4'></i>
+                    <i class='bx bx-file-blank text-4xl text-purple-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Solicitudes Globales</h3>
                     <p class="text-sm text-gray-600 mt-1">Control total de solicitudes</p>
                 </div>
             </button>
 
-            <button wire:click="setActiveTab('reportes')"
-                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+            <button wire:click="setActiveTab('reuniones')"
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-green-500">
                 <div class="text-center">
-                    <i class='bx bx-bar-chart-alt-2 text-4xl text-blue-600 mb-3'></i>
+                    <i class='bx bx-calendar-event text-4xl text-green-600 mb-3'></i>
+                    <h3 class="font-bold text-gray-900">Gestión de Reuniones</h3>
+                    <p class="text-sm text-gray-600 mt-1">Control total de reuniones</p>
+                </div>
+            </button>
+
+            <button wire:click="setActiveTab('reportes')"
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-orange-500">
+                <div class="text-center">
+                    <i class='bx bx-bar-chart-alt-2 text-4xl text-orange-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Reportes Avanzados</h3>
                     <p class="text-sm text-gray-600 mt-1">Analíticas y estadísticas</p>
                 </div>
             </button>
 
             <button wire:click="setActiveTab('configuracion')"
-                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-gray-500">
                 <div class="text-center">
-                    <i class='bx bx-shield text-4xl text-blue-600 mb-3'></i>
+                    <i class='bx bx-shield text-4xl text-gray-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Configuración</h3>
                     <p class="text-sm text-gray-600 mt-1">Configuración de la cuenta</p>
                 </div>
