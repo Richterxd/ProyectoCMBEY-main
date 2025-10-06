@@ -261,11 +261,12 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        </table>
-                    </div>
+                    </table>
+                </div>
                 @endif
             </div>
         </div>
+    </div>
     @endif
 
     @if($activeTab === 'create')
