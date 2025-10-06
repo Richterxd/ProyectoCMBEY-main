@@ -2,14 +2,14 @@
     @section('title', 'Gestión de Reuniones')
 
     <div class="min-h-screen bg-gray-50">
-        <!-- Header Section -->
+        <!-- Header Section - Modernized -->
         <div class="bg-white shadow-sm border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center py-6">
                     <div class="flex items-center mb-4 md:mb-0">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                                <i class='bx bx-group text-white text-xl'></i>
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <i class='bx bx-group text-white text-2xl'></i>
                             </div>
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900">Gestión de Reuniones</h1>
@@ -19,8 +19,8 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('dashboard.reuniones.create') }}" 
-                           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
-                            <i class='bx bx-plus mr-2'></i>
+                           class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <i class='bx bx-plus mr-2 text-lg'></i>
                             Nueva Reunión
                         </a>
                     </div>
