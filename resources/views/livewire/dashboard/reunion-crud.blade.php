@@ -339,31 +339,33 @@
 
     @if($activeTab === 'edit' && $editingReunion)
         <!-- Edit Reunion -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="p-6">
-                <div class="mb-8">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h1 class="text-3xl font-bold text-gray-900">Editar Reunión</h1>
-                            <p class="mt-2 text-gray-600">Modifique los datos de la reunión</p>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                                <i class='bx bx-edit mr-1'></i>
-                                Editando
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                <div class="p-8">
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900">Editar Reunión</h1>
+                                <p class="mt-2 text-gray-600">Modifique los datos de la reunión</p>
                             </div>
-                            <button wire:click="setActiveTab('list')" 
-                               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                                <i class='bx bx-arrow-back mr-1'></i>
-                                Volver
-                            </button>
+                            <div class="flex items-center space-x-3">
+                                <div class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                    <i class='bx bx-edit mr-1'></i>
+                                    Editando
+                                </div>
+                                <button wire:click="setActiveTab('list')" 
+                                   class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                    <i class='bx bx-arrow-back mr-1'></i>
+                                    Volver
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <form wire:submit.prevent="updateReunion">
-                    @include('livewire.dashboard.components.reunion-form', ['isEditing' => true])
-                </form>
+                    <form wire:submit.prevent="updateReunion">
+                        @include('livewire.dashboard.components.reunion-form', ['isEditing' => true])
+                    </form>
+                </div>
             </div>
         </div>
     @endif
