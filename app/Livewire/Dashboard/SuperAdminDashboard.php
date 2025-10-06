@@ -18,6 +18,7 @@ class SuperAdminDashboard extends Component
     public $usuarios;
     public $solicitudes;
     public $visitas;
+    public $reuniones;
     public $ambitos;
     public $instituciones;
     public $roles;
