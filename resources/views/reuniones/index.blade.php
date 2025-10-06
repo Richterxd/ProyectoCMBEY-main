@@ -263,90 +263,114 @@
                                         </th>
                                     </tr>
                                 </thead>
-                            <tbody class="bg-white divide-y divide-gray-100">
-                                @forelse ($reuniones as $reunion)
-                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="space-y-1">
-                                                <div class="text-sm font-semibold text-gray-900">{{ $reunion->titulo }}</div>
-                                                @if($reunion->descripcion)
-                                                    <div class="text-sm text-gray-500 truncate max-w-xs" title="{{ $reunion->descripcion }}">
-                                                        {{ Str::limit($reunion->descripcion, 50) }}
+                                <tbody class="bg-white/50 backdrop-blur-sm divide-y divide-gray-200/30">
+                                    @forelse ($reuniones as $reunion)
+                                        <tr class="hover:bg-blue-50/50 hover:shadow-lg transition-all duration-300 cursor-pointer group reunionRow" 
+                                            data-titulo="{{ strtolower($reunion->titulo) }}"
+                                            data-solicitud="{{ strtolower($reunion->solicitud->titulo ?? '') }}"
+                                            data-institucion="{{ strtolower($reunion->institucion->titulo ?? '') }}"
+                                            data-fecha="{{ $reunion->fecha_reunion->format('Y-m-d') }}">
+                                            <td class="px-8 py-6">
+                                                <div class="space-y-2">
+                                                    <div class="flex items-start space-x-3">
+                                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                                                            {{ substr($reunion->titulo, 0, 1) }}
+                                                        </div>
+                                                        <div class="flex-1 min-w-0">
+                                                            <div class="text-base font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
+                                                                {{ $reunion->titulo }}
+                                                            </div>
+                                                            @if($reunion->descripcion)
+                                                                <div class="text-sm text-gray-600 truncate max-w-xs mt-1" title="{{ $reunion->descripcion }}">
+                                                                    {{ Str::limit($reunion->descripcion, 60) }}
+                                                                </div>
+                                                            @endif
+                                                            @if($reunion->ubicacion)
+                                                                <div class="flex items-center text-xs text-gray-500 mt-2 bg-gray-100 px-3 py-1 rounded-full inline-flex">
+                                                                    <i class='bx bx-map-pin mr-1 text-red-500'></i>
+                                                                    {{ Str::limit($reunion->ubicacion, 35) }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     </div>
-                                                @endif
-                                                @if($reunion->ubicacion)
-                                                    <div class="flex items-center text-xs text-gray-400">
-                                                        <i class='bx bx-map-pin mr-1'></i>
-                                                        {{ Str::limit($reunion->ubicacion, 30) }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="space-y-1">
-                                                <div class="text-sm font-medium text-gray-900">{{ $reunion->solicitud->titulo ?? 'N/A' }}</div>
-                                                @if($reunion->solicitud)
-                                                    <div class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md inline-block">
-                                                        ID: {{ $reunion->solicitud->solicitud_id }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="space-y-1">
-                                                <div class="text-sm font-semibold text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
-                                                <div class="text-xs text-gray-500 bg-blue-50 px-2 py-0.5 rounded-md inline-block">
-                                                    <i class='bx bx-time mr-1'></i>{{ $reunion->fecha_reunion->format('H:i') }}
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="flex flex-wrap gap-2">
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800">
-                                                    <i class='bx bx-user mr-1'></i>
-                                                    {{ $reunion->asistentes->count() }} personas
-                                                </span>
-                                                @if($reunion->concejal())
-                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800">
-                                                        <i class='bx bx-star mr-1'></i>
-                                                        Concejal
+                                            </td>
+                                            <td class="px-8 py-6">
+                                                <div class="space-y-2">
+                                                    <div class="text-sm font-semibold text-gray-900 group-hover:text-green-700 transition-colors duration-200">
+                                                        {{ $reunion->solicitud->titulo ?? 'N/A' }}
+                                                    </div>
+                                                    @if($reunion->solicitud)
+                                                        <div class="inline-flex items-center text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                                                            <i class='bx bx-hash mr-1'></i>
+                                                            {{ $reunion->solicitud->solicitud_id }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+                                                        <i class='bx bx-buildings text-white text-sm'></i>
+                                                    </div>
+                                                    <div class="text-sm font-medium text-gray-900 group-hover:text-purple-700 transition-colors duration-200">
+                                                        {{ $reunion->institucion->titulo ?? 'N/A' }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6">
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center space-x-2">
+                                                        <div class="text-base font-bold text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
+                                                        @if($reunion->fecha_reunion->isToday())
+                                                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium animate-pulse">HOY</span>
+                                                        @elseif($reunion->fecha_reunion->isFuture())
+                                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">PRÓXIMA</span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="inline-flex items-center text-sm text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
+                                                        <i class='bx bx-time mr-2'></i>
+                                                        {{ $reunion->fecha_reunion->format('H:i') }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6">
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-indigo-100 to-blue-100 text-indigo-800 shadow-sm">
+                                                        <i class='bx bx-user mr-2'></i>
+                                                        {{ $reunion->asistentes->count() }} personas
                                                     </span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
-                                            <div class="flex items-center justify-end space-x-2">
-                                                <!-- Ver -->
-                                                <a href="{{ route('dashboard.reuniones.show', $reunion) }}" 
-                                                   class="p-2.5 text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 hover:shadow-md transform hover:scale-105" 
-                                                   title="Ver detalles">
-                                                    <i class='bx bx-show text-lg'></i>
-                                                </a>
-                                                <!-- Editar -->
-                                                <a href="{{ route('dashboard.reuniones.edit', $reunion) }}" 
-                                                   class="p-2.5 text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200 hover:shadow-md transform hover:scale-105" 
-                                                   title="Editar">
-                                                    <i class='bx bx-edit text-lg'></i>
-                                                </a>
-                                                <!-- Eliminar -->
-                                                <form action="{{ route('dashboard.reuniones.destroy', $reunion) }}" 
-                                                      method="POST" 
-                                                      class="inline-block"
-                                                      onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta reunión?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" 
-                                                            class="p-2.5 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 hover:shadow-md transform hover:scale-105" 
+                                                    @if($reunion->concejal())
+                                                        <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 shadow-sm">
+                                                            <i class='bx bx-crown mr-2 text-yellow-600'></i>
+                                                            Concejal
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-6 text-right">
+                                                <div class="flex items-center justify-end space-x-2">
+                                                    <!-- Ver -->
+                                                    <a href="{{ route('dashboard.reuniones.show', $reunion) }}" 
+                                                       class="group p-3 text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-300 hover:shadow-xl transform hover:scale-110 hover:-translate-y-1" 
+                                                       title="Ver detalles">
+                                                        <i class='bx bx-show text-xl group-hover:text-blue-700'></i>
+                                                    </a>
+                                                    <!-- Editar -->
+                                                    <a href="{{ route('dashboard.reuniones.edit', $reunion) }}" 
+                                                       class="group p-3 text-emerald-600 hover:bg-emerald-50 rounded-2xl transition-all duration-300 hover:shadow-xl transform hover:scale-110 hover:-translate-y-1" 
+                                                       title="Editar">
+                                                        <i class='bx bx-edit text-xl group-hover:text-emerald-700'></i>
+                                                    </a>
+                                                    <!-- Eliminar -->
+                                                    <button onclick="deleteReunion({{ $reunion->id }})"
+                                                            class="group p-3 text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 hover:shadow-xl transform hover:scale-110 hover:-translate-y-1" 
                                                             title="Eliminar">
-                                                        <i class='bx bx-trash text-lg'></i>
+                                                        <i class='bx bx-trash text-xl group-hover:text-red-700'></i>
                                                     </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                </div>
+                                            </td>
+                                        </tr>
                                 @empty
                                     <tr>
                                         <td colspan="6" class="px-6 py-16 text-center">
