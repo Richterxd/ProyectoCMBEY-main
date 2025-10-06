@@ -37,6 +37,11 @@ class AdministradorDashboard extends Component
             ->orderBy('fecha', 'desc')
             ->get();
             
+        // Load all reuniones for admin view
+        $this->reuniones = Reunion::with(['solicitud', 'institucion', 'asistentes'])
+            ->orderBy('fecha_reunion', 'desc')
+            ->get();
+            
         $this->ambitos = Ambito::all();
         $this->usuarios = User::with('persona')->get();
     }
