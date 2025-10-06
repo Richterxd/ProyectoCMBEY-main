@@ -24,7 +24,7 @@ Route::match(['get', 'post'], '/login', LoginForm::class)->name('login')->middle
 
 Route::match(['get', 'post'], '/registro', RegisterForm::class)->name('registro')->middleware('guest');
 
-Route::get('/recuperar-contraseña', \App\Livewire\Auth\PasswordRecoveryForm::class)->name('password.recovery')->middleware('guest');
+Route::match(['get', 'post'], '/recuperar-contraseña', \App\Livewire\Auth\PasswordRecoveryForm::class)->name('password.recovery')->middleware('guest');
 
 Route::get('/home', function () {
     return view('users.clientVista');
