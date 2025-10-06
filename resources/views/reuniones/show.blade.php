@@ -68,10 +68,42 @@
                         </div>
                         
                         <!-- Print Button -->
-                        <button onclick="printMeeting()" class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                            <i class='bx bx-printer mr-2 group-hover:scale-110 transition-transform duration-200'></i>
-                            <span class="font-medium">Imprimir</span>
-                        </button>
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                                <i class='bx bx-printer mr-2 group-hover:scale-110 transition-transform duration-200'></i>
+                                <span class="font-medium">Imprimir</span>
+                                <i class='bx bx-chevron-down ml-2 transition-transform duration-200' :class="{ 'rotate-180': open }"></i>
+                            </button>
+                            
+                            <div x-show="open" 
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="transform opacity-0 scale-95"
+                                 x-transition:enter-end="transform opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="transform opacity-100 scale-100"
+                                 x-transition:leave-end="transform opacity-0 scale-95"
+                                 @click.away="open = false"
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 z-50">
+                                <div class="p-2">
+                                    <a href="{{ route('dashboard.reuniones.pdf', $reunion) }}" 
+                                       class="group flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 rounded-lg transition-all duration-200">
+                                        <i class='bx bx-file-pdf text-red-600 mr-3 text-lg group-hover:scale-110 transition-transform'></i>
+                                        <div>
+                                            <div class="font-semibold">Descargar PDF</div>
+                                            <div class="text-xs text-gray-500">Con DomPDF</div>
+                                        </div>
+                                    </a>
+                                    <button onclick="printMeeting()" 
+                                            class="group flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-all duration-200">
+                                        <i class='bx bx-printer text-blue-600 mr-3 text-lg group-hover:scale-110 transition-transform'></i>
+                                        <div>
+                                            <div class="font-semibold">Imprimir Navegador</div>
+                                            <div class="text-xs text-gray-500">Vista optimizada</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         
                         <!-- Edit Button -->
                         <a href="{{ route('dashboard.reuniones.edit', $reunion) }}" 
