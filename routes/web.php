@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::match(['get', 'post'], '/login', LoginForm::class)->name('login')->middleware('guest');
 
-Route::get('/registro', RegisterForm::class)->name('registro')->middleware('guest');
+Route::match(['get', 'post'], '/registro', RegisterForm::class)->name('registro')->middleware('guest');
 
 Route::get('/recuperar-contraseña', \App\Livewire\Auth\PasswordRecoveryForm::class)->name('password.recovery')->middleware('guest');
 
