@@ -372,6 +372,19 @@
         </div>
         @endif
 
+        @if($activeTab === 'reuniones')
+            <div class="mt-8 bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    <i class='bx bx-calendar-event text-green-600 mr-3'></i>
+                    Control Total de Reuniones
+                </h2>
+                
+                <div class="mb-6">
+                    <livewire:dashboard.reunion-crud />
+                </div>
+            </div>
+        @endif
+
         @if($activeTab === 'reportes')
         <div class="mt-8 bg-white rounded-xl shadow-lg p-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
