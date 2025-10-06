@@ -538,6 +538,12 @@
                             </button>
                             
                             <div class="flex space-x-3">
+                                <a href="{{ route('dashboard.reuniones.pdf', $selectedReunion->id) }}" 
+                                   target="_blank"
+                                   class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                                    <i class='bx bx-file-pdf mr-2'></i>
+                                    Descargar PDF
+                                </a>
                                 @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
                                     <button wire:click="editReunion({{ $selectedReunion->id }})" 
                                             class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
