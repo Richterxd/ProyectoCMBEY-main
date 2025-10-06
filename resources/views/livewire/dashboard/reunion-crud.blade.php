@@ -372,19 +372,20 @@
 
     @if($activeTab === 'view' && $selectedReunion)
         <!-- View Reunion Details -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-semibold text-gray-900">Detalles de la Reunión</h2>
-                        <p class="text-gray-600">Información completa de la reunión</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Detalles de la Reunión</h2>
+                            <p class="text-gray-600">Información completa de la reunión</p>
+                        </div>
+                        <button wire:click="setActiveTab('list')" 
+                                class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                            <i class='bx bx-arrow-back mr-1'></i>
+                            Volver a la Lista
+                        </button>
                     </div>
-                    <button wire:click="setActiveTab('list')" 
-                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                        <i class='bx bx-arrow-back mr-1'></i>
-                        Volver a la Lista
-                    </button>
-                </div>
                 
                 <div class="space-y-6">
                     <!-- Basic Info -->
