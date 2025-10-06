@@ -271,66 +271,68 @@
 
     @if($activeTab === 'create')
         <!-- Create New Reunion -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="p-6">
-                <div class="mb-8">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h1 class="text-3xl font-bold text-gray-900">Nueva Reunión</h1>
-                            <p class="mt-2 text-gray-600">Complete todos los campos para programar una nueva reunión</p>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                                <i class='bx bx-check-circle mr-1'></i>
-                                Reunión Completa
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                <div class="p-8">
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900">Nueva Reunión</h1>
+                                <p class="mt-2 text-gray-600">Complete todos los campos para programar una nueva reunión</p>
                             </div>
-                            <button wire:click="setActiveTab('list')" 
-                               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                                <i class='bx bx-arrow-back mr-1'></i>
-                                Volver
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Progress Indicator -->
-                <div class="mb-8">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                                    1
+                            <div class="flex items-center space-x-3">
+                                <div class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                    <i class='bx bx-check-circle mr-1'></i>
+                                    Reunión Completa
                                 </div>
-                                <span class="ml-2 text-sm font-medium text-blue-600">Información Básica</span>
-                            </div>
-                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                                    2
-                                </div>
-                                <span class="ml-2 text-sm font-medium text-blue-600">Relaciones</span>
-                            </div>
-                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                                    3
-                                </div>
-                                <span class="ml-2 text-sm font-medium text-blue-600">Participantes</span>
-                            </div>
-                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                                    4
-                                </div>
-                                <span class="ml-2 text-sm font-medium text-blue-600">Confirmación</span>
+                                <button wire:click="setActiveTab('list')" 
+                                   class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                    <i class='bx bx-arrow-back mr-1'></i>
+                                    Volver
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <form wire:submit.prevent="createReunion">
-                    @include('livewire.dashboard.components.reunion-form')
-                </form>
+                    <!-- Progress Indicator -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                        1
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium text-blue-600">Información Básica</span>
+                                </div>
+                                <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                        2
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium text-blue-600">Relaciones</span>
+                                </div>
+                                <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                        3
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium text-blue-600">Participantes</span>
+                                </div>
+                                <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                        4
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium text-blue-600">Confirmación</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form wire:submit.prevent="createReunion">
+                        @include('livewire.dashboard.components.reunion-form')
+                    </form>
+                </div>
             </div>
         </div>
     @endif
