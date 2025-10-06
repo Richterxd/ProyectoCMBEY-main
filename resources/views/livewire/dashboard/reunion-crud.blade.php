@@ -134,8 +134,7 @@
                                                 
                                                 <!-- Delete Button -->
                                                 @if(Auth::user()->isSuperAdministrador())
-                                                    <button wire:click="deleteReunion({{ $reunion->id }})" 
-                                                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta reunión?')"
+                                                    <button onclick="confirmDelete({{ $reunion->id }})" 
                                                             class="text-red-600 hover:text-red-900">
                                                         <i class='bx bx-trash'></i>
                                                     </button>
@@ -156,116 +155,63 @@
         <!-- Create New Reunion -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-6">Nueva Reunión</h2>
-                
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900">Nueva Reunión</h1>
+                            <p class="mt-2 text-gray-600">Complete todos los campos para programar una nueva reunión</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                <i class='bx bx-check-circle mr-1'></i>
+                                Reunión Completa
+                            </div>
+                            <button wire:click="setActiveTab('list')" 
+                               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class='bx bx-arrow-back mr-1'></i>
+                                Volver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    1
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Información Básica</span>
+                            </div>
+                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    2
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Relaciones</span>
+                            </div>
+                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    3
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Participantes</span>
+                            </div>
+                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    4
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Confirmación</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <form wire:submit.prevent="createReunion">
-                    <div class="space-y-6">
-                        <!-- Basic Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Título *</label>
-                                <input type="text" wire:model="titulo" 
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="Título de la reunión">
-                                @error('titulo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha y Hora *</label>
-                                <input type="datetime-local" wire:model="fecha_reunion" 
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                @error('fecha_reunion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Solicitud *</label>
-                                <select wire:model="solicitud_id" 
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Selecciona una solicitud</option>
-                                    @foreach($solicitudes as $solicitud)
-                                        <option value="{{ $solicitud->id }}">{{ $solicitud->titulo }} ({{ $solicitud->solicitud_id }})</option>
-                                    @endforeach
-                                </select>
-                                @error('solicitud_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Institución *</label>
-                                <select wire:model="institucion_id" 
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Selecciona una institución</option>
-                                    @foreach($instituciones as $institucion)
-                                        <option value="{{ $institucion->id }}">{{ $institucion->titulo }}</option>
-                                    @endforeach
-                                </select>
-                                @error('institucion_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Ubicación *</label>
-                            <input type="text" wire:model="ubicacion" 
-                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                   placeholder="Lugar donde se realizará la reunión">
-                            @error('ubicacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
-                            <textarea wire:model="descripcion" rows="3" 
-                                      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                      placeholder="Descripción de la reunión (opcional)"></textarea>
-                            @error('descripcion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Asistentes -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Asistentes *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-4">
-                                @foreach($personas as $persona)
-                                    <label class="flex items-center">
-                                        <input type="checkbox" wire:model="asistentes" value="{{ $persona->cedula }}" 
-                                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                        <span class="ml-2 text-sm text-gray-700">{{ $persona->nombre }} {{ $persona->apellido }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                            @error('asistentes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        @if(count($asistentes) > 0)
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Concejal *</label>
-                                <select wire:model="concejal" 
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Selecciona el concejal</option>
-                                    @foreach($asistentes as $cedula)
-                                        @php
-                                            $persona = $personas->firstWhere('cedula', $cedula);
-                                        @endphp
-                                        @if($persona)
-                                            <option value="{{ $cedula }}">{{ $persona->nombre }} {{ $persona->apellido }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                @error('concejal') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        @endif
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="flex justify-end space-x-4 mt-8 pt-6 border-t">
-                        <button type="button" wire:click="setActiveTab('list')" 
-                                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                            Cancelar
-                        </button>
-                        <button type="submit" 
-                                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                            Crear Reunión
-                        </button>
-                    </div>
+                    @include('livewire.dashboard.components.reunion-form')
                 </form>
             </div>
         </div>
@@ -275,189 +221,127 @@
         <!-- Edit Reunion -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-6">Editar Reunión</h2>
-                
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900">Editar Reunión</h1>
+                            <p class="mt-2 text-gray-600">Modifique los datos de la reunión</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                <i class='bx bx-edit mr-1'></i>
+                                Editando
+                            </div>
+                            <button wire:click="setActiveTab('list')" 
+                               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class='bx bx-arrow-back mr-1'></i>
+                                Volver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <form wire:submit.prevent="updateReunion">
-                    <div class="space-y-6">
-                        <!-- Basic Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Título *</label>
-                                <input type="text" wire:model="titulo" 
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                @error('titulo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha y Hora *</label>
-                                <input type="datetime-local" wire:model="fecha_reunion" 
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                @error('fecha_reunion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Solicitud *</label>
-                                <select wire:model="solicitud_id" 
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Selecciona una solicitud</option>
-                                    @foreach($solicitudes as $solicitud)
-                                        <option value="{{ $solicitud->id }}">{{ $solicitud->titulo }} ({{ $solicitud->solicitud_id }})</option>
-                                    @endforeach
-                                </select>
-                                @error('solicitud_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Institución *</label>
-                                <select wire:model="institucion_id" 
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Selecciona una institución</option>
-                                    @foreach($instituciones as $institucion)
-                                        <option value="{{ $institucion->id }}">{{ $institucion->titulo }}</option>
-                                    @endforeach
-                                </select>
-                                @error('institucion_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Ubicación *</label>
-                            <input type="text" wire:model="ubicacion" 
-                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            @error('ubicacion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
-                            <textarea wire:model="descripcion" rows="3" 
-                                      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                            @error('descripcion') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Asistentes -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Asistentes *</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-4">
-                                @foreach($personas as $persona)
-                                    <label class="flex items-center">
-                                        <input type="checkbox" wire:model="asistentes" value="{{ $persona->cedula }}" 
-                                               class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                        <span class="ml-2 text-sm text-gray-700">{{ $persona->nombre }} {{ $persona->apellido }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                            @error('asistentes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        @if(count($asistentes) > 0)
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Concejal *</label>
-                                <select wire:model="concejal" 
-                                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Selecciona el concejal</option>
-                                    @foreach($asistentes as $cedula)
-                                        @php
-                                            $persona = $personas->firstWhere('cedula', $cedula);
-                                        @endphp
-                                        @if($persona)
-                                            <option value="{{ $cedula }}">{{ $persona->nombre }} {{ $persona->apellido }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                @error('concejal') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-                        @endif
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="flex justify-end space-x-4 mt-8 pt-6 border-t">
-                        <button type="button" wire:click="setActiveTab('list')" 
-                                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                            Cancelar
-                        </button>
-                        <button type="submit" 
-                                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                            Actualizar Reunión
-                        </button>
-                    </div>
+                    @include('livewire.dashboard.components.reunion-form', ['isEditing' => true])
                 </form>
             </div>
         </div>
     @endif
 
-    <!-- Modal for viewing reunion -->
-    @if($showingModal && $selectedReunion)
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto m-4">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-semibold text-gray-900">Detalles de la Reunión</h2>
-                        <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">
-                            <i class='bx bx-x text-2xl'></i>
-                        </button>
+    @if($activeTab === 'view' && $selectedReunion)
+        <!-- View Reunion Details -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-900">Detalles de la Reunión</h2>
+                        <p class="text-gray-600">Información completa de la reunión</p>
                     </div>
-                    
-                    <div class="space-y-6">
-                        <!-- Basic Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                                <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->titulo }}</div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Fecha y Hora</label>
-                                <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->fecha_reunion->format('d/m/Y H:i') }}</div>
+                    <button wire:click="setActiveTab('list')" 
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                        <i class='bx bx-arrow-back mr-1'></i>
+                        Volver a la Lista
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Basic Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->titulo }}</div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha y Hora</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->fecha_reunion->format('d/m/Y H:i') }}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Solicitud</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                {{ $selectedReunion->solicitud->titulo ?? 'N/A' }}
+                                @if($selectedReunion->solicitud)
+                                    <br><span class="text-sm text-gray-500">ID: {{ $selectedReunion->solicitud->solicitud_id }}</span>
+                                @endif
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Solicitud</label>
-                                <div class="p-3 bg-gray-50 rounded-lg">
-                                    {{ $selectedReunion->solicitud->titulo ?? 'N/A' }}
-                                    @if($selectedReunion->solicitud)
-                                        <br><span class="text-sm text-gray-500">ID: {{ $selectedReunion->solicitud->solicitud_id }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Institución</label>
-                                <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->institucion->titulo ?? 'N/A' }}</div>
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Institución</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->institucion->titulo ?? 'N/A' }}</div>
                         </div>
+                    </div>
 
+                    @if($selectedReunion->ubicacion)
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
                             <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->ubicacion }}</div>
                         </div>
+                    @endif
 
-                        @if($selectedReunion->descripcion)
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                                <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->descripcion }}</div>
-                            </div>
-                        @endif
+                    @if($selectedReunion->descripcion)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->descripcion }}</div>
+                        </div>
+                    @endif
 
-                        <!-- Asistentes -->
-                        <div class="border-t pt-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Asistentes ({{ $selectedReunion->asistentes->count() }})</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                @foreach($selectedReunion->asistentes as $asistente)
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div>
-                                            <div class="font-medium text-gray-900">{{ $asistente->nombre }} {{ $asistente->apellido }}</div>
-                                            <div class="text-sm text-gray-500">{{ $asistente->cedula }}</div>
-                                        </div>
-                                        @if($asistente->pivot->es_concejal)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <i class='bx bx-star mr-1'></i>Concejal
-                                            </span>
-                                        @endif
+                    <!-- Asistentes -->
+                    <div class="border-t pt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Asistentes ({{ $selectedReunion->asistentes->count() }})</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach($selectedReunion->asistentes as $asistente)
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <div class="font-medium text-gray-900">{{ $asistente->nombre }} {{ $asistente->apellido }}</div>
+                                        <div class="text-sm text-gray-500">{{ $asistente->cedula }}</div>
                                     </div>
-                                @endforeach
-                            </div>
+                                    @if($asistente->pivot->es_concejal)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <i class='bx bx-star mr-1'></i>Concejal
+                                        </span>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-between items-center pt-6 border-t">
+                        <button wire:click="setActiveTab('list')" 
+                                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Volver a la Lista
+                        </button>
+                        
+                        <div class="flex space-x-3">
+                            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                <button wire:click="editReunion({{ $selectedReunion->id }})" 
+                                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <i class='bx bx-edit mr-2'></i>
+                                    Editar Reunión
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -465,3 +349,53 @@
         </div>
     @endif
 </div>
+
+<!-- SweetAlert2 Script for confirmations -->
+<script>
+function confirmDelete(reunionId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            @this.deleteReunion(reunionId);
+        }
+    });
+}
+
+// Show success/error notifications
+document.addEventListener('DOMContentLoaded', function () {
+    @if (session()->has('success'))
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session("success") }}',
+            timer: 3000,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    @endif
+
+    @if (session()->has('error'))
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '{{ session("error") }}',
+            timer: 5000,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    @endif
+});
+</script>
