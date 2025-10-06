@@ -126,7 +126,7 @@ class ReunionCrud extends Component
             return;
         }
         
-        $this->showingModal = true;
+        $this->activeTab = 'view';
     }
 
     public function editReunion($reunionId)
