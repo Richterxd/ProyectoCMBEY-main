@@ -92,54 +92,53 @@
                         </div>
                     @else
 
-                    <!-- Table View -->
-                    <div id="tableViewContent" class="overflow-hidden rounded-2xl border border-gray-200/50">
-                        <div class="overflow-x-auto">
-                            <table class="w-full divide-y divide-gray-200/50">
-                                <thead class="bg-gradient-to-r from-gray-50/80 to-blue-50/80 backdrop-blur-sm">
-                                    <tr>
-                                        <th class="px-8 py-6 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b-2 border-blue-100">
-                                            <div class="flex items-center space-x-3 group cursor-pointer" onclick="sortTable('titulo')">
-                                                <i class='bx bx-text text-blue-500'></i>
-                                                <span class="group-hover:text-blue-600 transition-colors duration-200">Reunión</span>
-                                                <i class='bx bx-sort text-gray-400 group-hover:text-blue-500 transition-colors duration-200'></i>
-                                            </div>
-                                        </th>
-                                        <th class="px-8 py-6 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b-2 border-blue-100">
-                                            <div class="flex items-center space-x-3 group cursor-pointer" onclick="sortTable('solicitud')">
-                                                <i class='bx bx-file-blank text-green-500'></i>
-                                                <span class="group-hover:text-green-600 transition-colors duration-200">Solicitud</span>
-                                                <i class='bx bx-sort text-gray-400 group-hover:text-green-500 transition-colors duration-200'></i>
-                                            </div>
-                                        </th>
-                                        <th class="px-8 py-6 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b-2 border-blue-100">
-                                            <div class="flex items-center space-x-3 group cursor-pointer" onclick="sortTable('institucion')">
-                                                <i class='bx bx-buildings text-purple-500'></i>
-                                                <span class="group-hover:text-purple-600 transition-colors duration-200">Institución</span>
-                                                <i class='bx bx-sort text-gray-400 group-hover:text-purple-500 transition-colors duration-200'></i>
-                                            </div>
-                                        </th>
-                                        <th class="px-8 py-6 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b-2 border-blue-100">
-                                            <div class="flex items-center space-x-3 group cursor-pointer" onclick="sortTable('fecha')">
-                                                <i class='bx bx-calendar text-orange-500'></i>
-                                                <span class="group-hover:text-orange-600 transition-colors duration-200">Fecha</span>
-                                                <i class='bx bx-sort text-gray-400 group-hover:text-orange-500 transition-colors duration-200'></i>
-                                            </div>
-                                        </th>
-                                        <th class="px-8 py-6 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b-2 border-blue-100">
-                                            <div class="flex items-center space-x-3">
-                                                <i class='bx bx-group text-indigo-500'></i>
-                                                <span>Asistentes</span>
-                                            </div>
-                                        </th>
-                                        <th class="px-8 py-6 text-right text-xs font-bold text-gray-700 uppercase tracking-wider border-b-2 border-blue-100">
-                                            <div class="flex items-center justify-end space-x-3">
-                                                <i class='bx bx-cog text-gray-500'></i>
-                                                <span>Acciones</span>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-group mr-2'></i>
+                                            Reunión
+                                        </div>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-file-blank mr-2'></i>
+                                            Solicitud
+                                        </div>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-buildings mr-2'></i>
+                                            Institución
+                                        </div>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-calendar mr-2'></i>
+                                            Fecha
+                                        </div>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-user-circle mr-2'></i>
+                                            Asistentes
+                                        </div>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-cog mr-2'></i>
+                                            Acciones
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
                                 <tbody class="bg-white/50 backdrop-blur-sm divide-y divide-gray-200/30">
                                     @forelse ($reuniones as $reunion)
                                         <tr class="hover:bg-blue-50/50 hover:shadow-lg transition-all duration-300 cursor-pointer group reunionRow" 
