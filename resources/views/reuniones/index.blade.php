@@ -28,13 +28,15 @@
             </div>
         </div>
 
-        <!-- Success Message -->
+        <!-- Success Message - Enhanced -->
         @if (session('success'))
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 shadow-sm">
                     <div class="flex items-center">
-                        <i class='bx bx-check-circle text-green-500 mr-2'></i>
-                        <span class="text-green-800">{{ session('success') }}</span>
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                            <i class='bx bx-check text-white text-lg'></i>
+                        </div>
+                        <span class="text-green-800 font-medium">{{ session('success') }}</span>
                     </div>
                 </div>
             </div>
