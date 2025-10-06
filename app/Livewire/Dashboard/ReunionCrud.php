@@ -269,12 +269,6 @@ class ReunionCrud extends Component
         }
     }
 
-    public function closeModal()
-    {
-        $this->showingModal = false;
-        $this->selectedReunion = null;
-    }
-
     public function resetForm()
     {
         $this->titulo = '';
