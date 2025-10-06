@@ -18,7 +18,6 @@ class ReunionCrud extends Component
     public $reuniones;
     public $selectedReunion = null;
     public $editingReunion = null;
-    public $showingModal = false;
     
     // Form fields
     public $titulo = '';
@@ -29,6 +28,7 @@ class ReunionCrud extends Component
     public $institucion_id = '';
     public $asistentes = [];
     public $concejal = '';
+    public $nuevo_estado_solicitud = '';
     
     // Available data for selects
     public $solicitudes = [];
@@ -44,14 +44,15 @@ class ReunionCrud extends Component
     ];
 
     protected $rules = [
-        'titulo' => 'required|min:5|max:200',
+        'titulo' => 'required|min:5|max:255',
         'descripcion' => 'nullable|max:1000',
         'fecha_reunion' => 'required|date|after_or_equal:today',
-        'ubicacion' => 'required|min:5|max:200',
+        'ubicacion' => 'nullable|max:255',
         'solicitud_id' => 'required|exists:solicitudes,id',
         'institucion_id' => 'required|exists:instituciones,id',
         'asistentes' => 'required|array|min:1',
-        'concejal' => 'required'
+        'concejal' => 'nullable',
+        'nuevo_estado_solicitud' => 'nullable|max:255'
     ];
 
     public function mount()
