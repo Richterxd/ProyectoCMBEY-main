@@ -137,23 +137,81 @@
             </script>
         @endif
 
-        <!-- Content Section - Enhanced -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-200">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <i class='bx bx-calendar-event text-blue-600 text-lg'></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900">
-                                Reuniones Registradas
-                            </h2>
+        <!-- Enhanced Content Section -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm font-medium">Total Reuniones</p>
+                            <p class="text-2xl font-bold">{{ $reuniones->total() }}</p>
                         </div>
-                        <div class="bg-gray-50 px-3 py-1 rounded-full">
-                            <span class="text-sm text-gray-600 font-medium">
-                                Total: {{ $reuniones->total() }} reuniones
-                            </span>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class='bx bx-calendar-event text-2xl'></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm font-medium">Este Mes</p>
+                            <p class="text-2xl font-bold">{{ $reuniones->where('fecha_reunion', '>=', now()->startOfMonth())->count() }}</p>
+                        </div>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class='bx bx-trending-up text-2xl'></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm font-medium">Próximas</p>
+                            <p class="text-2xl font-bold">{{ $reuniones->where('fecha_reunion', '>', now())->count() }}</p>
+                        </div>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class='bx bx-time-five text-2xl'></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100 text-sm font-medium">Instituciones</p>
+                            <p class="text-2xl font-bold">{{ $reuniones->unique('institucion_id')->count() }}</p>
+                        </div>
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class='bx bx-buildings text-2xl'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content Card -->
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
+                                <i class='bx bx-calendar-event text-blue-600 text-2xl'></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-900">
+                                    Reuniones Registradas
+                                </h2>
+                                <p class="text-gray-600 text-sm">Gestión completa del sistema de reuniones</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 rounded-xl border border-blue-200">
+                                <span class="text-sm text-blue-800 font-semibold flex items-center">
+                                    <i class='bx bx-layer mr-2'></i>
+                                    <span id="visibleCount">{{ $reuniones->count() }}</span> de {{ $reuniones->total() }}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
