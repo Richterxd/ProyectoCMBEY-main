@@ -62,39 +62,12 @@ Route::middleware('auth')->group(function () {
 
     // Role-specific dashboard routes
 
-    // CRUD de Reuniones (Administrador y SuperAdministrador)
-    // Se definen las rutas de 'resource' de forma EXPLICITA para asegurar que el nombre 'dashboard.reuniones.index'
-    // se registra correctamente y para mantener la funcionalidad CRUD completa.
-
-    Route::get('/dashboard/reuniones', [ReunionController::class, 'index'])
+    // Gestión de Reuniones usando Livewire (Administrador y SuperAdministrador)
+    Route::get('/dashboard/reuniones', SuperAdminReuniones::class)
         ->name('dashboard.reuniones.index')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones - RUTA DE ÍNDICE (La que estaba dando error)
-
-    Route::get('/dashboard/reuniones/crear', [ReunionController::class, 'create'])
-        ->name('dashboard.reuniones.create')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones/crear - RUTA DE CREACIÓN
-
-    Route::post('/dashboard/reuniones', [ReunionController::class, 'store'])
-        ->name('dashboard.reuniones.store')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones - RUTA DE ALMACENAMIENTO
-
-    // Estas rutas requieren que el modelo 'Reunion' se resuelva por inyección de dependencias (model binding)
-    Route::get('/dashboard/reuniones/{reunion}', [ReunionController::class, 'show'])
-        ->name('dashboard.reuniones.show')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion} - RUTA DE VISTA
-
-    Route::get('/dashboard/reuniones/{reunion}/editar', [ReunionController::class, 'edit'])
-        ->name('dashboard.reuniones.edit')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion}/editar - RUTA DE EDICIÓN
-
-    Route::put('/dashboard/reuniones/{reunion}', [ReunionController::class, 'update'])
-        ->name('dashboard.reuniones.update')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion} - RUTA DE ACTUALIZACIÓN
-
-    Route::delete('/dashboard/reuniones/{reunion}', [ReunionController::class, 'destroy'])
-        ->name('dashboard.reuniones.destroy')
-        ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion} - RUTA DE ELIMINACIÓN
+        ->middleware('role:1,2'); // URI: /dashboard/reuniones - RUTA PRINCIPAL CON LIVEWIRE
     
+    // Mantener solo la ruta de PDF del controlador original
     Route::get('/dashboard/reuniones/{reunion}/pdf', [ReunionController::class, 'generatePDF'])
         ->name('dashboard.reuniones.pdf')
         ->middleware('role:1,2'); // URI: /dashboard/reuniones/{reunion}/pdf - RUTA DE PDF
