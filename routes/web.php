@@ -74,50 +74,50 @@ Route::middleware('auth')->group(function () {
 
     //usuario routes
 
-    Route::get('/dashboard/usuario', UsuarioDashboard::class)
+    Route::match(['get', 'post'], '/dashboard/usuario', UsuarioDashboard::class)
         ->name('dashboard.usuario')
         ->middleware('role:3');
 
-    Route::get('/dashboard/usuario/solicitud/crear', SolicitudCompleta::class)
+    Route::match(['get', 'post'], '/dashboard/usuario/solicitud/crear', SolicitudCompleta::class)
         ->name('dashboard.usuario.solicitud.crear')
         ->middleware('role:3');
 
-    Route::get('/dashboard/usuario/solicitud', SolicitudCompleta::class)
+    Route::match(['get', 'post'], '/dashboard/usuario/solicitud', SolicitudCompleta::class)
         ->name('dashboard.usuario.solicitud')
         ->middleware('role:3');
 
 
     //administrador routes
 
-    Route::get('/dashboard/administrador', AdministradorDashboard::class)
+    Route::match(['get', 'post'], '/dashboard/administrador', AdministradorDashboard::class)
         ->name('dashboard.admin')
         ->middleware('role:2');
 
     //superdmin routes
 
-    Route::get('/dashboard/superadmin', SuperAdminDashboard::class)
+    Route::match(['get', 'post'], '/dashboard/superadmin', SuperAdminDashboard::class)
         ->name('dashboard.superadmin')
         ->middleware('role:1');
 
 
-    Route::get('/dashboard/superadmin/visitas', SuperAdminVisitas::class)
+    Route::match(['get', 'post'], '/dashboard/superadmin/visitas', SuperAdminVisitas::class)
         ->name('dashboard.superadmin.visitas')
         ->middleware('role:1');
 
-    Route::get('dashboard/superadmin/trabajadores', SuperAdminTrabajadores::class)
+    Route::match(['get', 'post'], 'dashboard/superadmin/trabajadores', SuperAdminTrabajadores::class)
         ->name('dashboard.superadmin.trabajadores')
         ->middleware('role:1');
 
-    Route::get('/dashboard/superadmin/usuarios', SuperadminUsuarios::class)
+    Route::match(['get', 'post'], '/dashboard/superadmin/usuarios', SuperadminUsuarios::class)
         ->name('dashboard.superadmin.usuarios')
         ->middleware('role:1');
 
-    Route::get('/dashboard/superadmin/reportes', SuperAdminReportes::class)
+    Route::match(['get', 'post'], '/dashboard/superadmin/reportes', SuperAdminReportes::class)
         ->name('dashboard.superadmin.reportes')
         ->middleware('role:1,2');
 
 
-    Route::get('/dashboard/superadmin/solicitudes', SuperAdminSolicitudes::class)
+    Route::match(['get', 'post'], '/dashboard/superadmin/solicitudes', SuperAdminSolicitudes::class)
         ->name('dashboard.superadmin.solicitudes')
         ->middleware('role:1');
 });
