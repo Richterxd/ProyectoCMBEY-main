@@ -50,7 +50,7 @@
         </div>
 
         <!-- Management Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
                 <div class="text-center">
                     <i class='bx bx-cog text-4xl text-blue-600 mb-3'></i>
@@ -62,23 +62,34 @@
                 </div>
             </div>
             
-            <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+            <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-green-500">
                 <div class="text-center">
-                    <i class='bx bx-calendar-plus text-4xl text-blue-600 mb-3'></i>
+                    <i class='bx bx-group text-4xl text-green-600 mb-3'></i>
+                    <h3 class="font-bold text-gray-900">Gestión de Reuniones</h3>
+                    <p class="text-sm text-gray-600 mt-1">Administrar reuniones municipales</p>
+                    <button wire:click="setActiveTab('reuniones')" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        Ver Reuniones
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-purple-500">
+                <div class="text-center">
+                    <i class='bx bx-calendar-plus text-4xl text-purple-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Visitas Programadas</h3>
                     <p class="text-sm text-gray-600 mt-1">Revisar visitas municipales</p>
-                    <button wire:click="setActiveTab('visitas')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <button wire:click="setActiveTab('visitas')" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                         Ver Visitas
                     </button>
                 </div>
             </div>
             
-            <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+            <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-orange-500">
                 <div class="text-center">
-                    <i class='bx bx-bar-chart-alt-2 text-4xl text-blue-600 mb-3'></i>
+                    <i class='bx bx-bar-chart-alt-2 text-4xl text-orange-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Reportes</h3>
                     <p class="text-sm text-gray-600 mt-1">Generar reportes estadísticos</p>
-                    <button wire:click="setActiveTab('reportes')" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <button wire:click="setActiveTab('reportes')" class="mt-4 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
                         Ver Reportes
                     </button>
                 </div>
