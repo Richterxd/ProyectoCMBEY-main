@@ -547,58 +547,79 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
+                        </div>
+                </div>
             </div>
         </div>
     @endif
+
+    <!-- Delete Confirmation Modal -->
+    <div x-data="{ showDeleteModal: false, reunionToDelete: null }" 
+         x-show="showDeleteModal" 
+         x-cloak
+         class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50"
+         @keydown.escape.window="showDeleteModal = false">
+        <div class="bg-white rounded-xl max-w-md w-full mx-4 shadow-2xl">
+            <div class="p-6">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                    <i class='bx bx-trash text-red-600 text-2xl'></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Eliminar Reunión</h3>
+                <p class="text-sm text-gray-600 text-center mb-6">
+                    Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta reunión?
+                </p>
+                <div class="flex space-x-3">
+                    <button @click="showDeleteModal = false" 
+                            class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+                        Cancelar
+                    </button>
+                    <button @click="$wire.deleteReunion(reunionToDelete); showDeleteModal = false" 
+                            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- SweetAlert2 Script for confirmations -->
 <script>
-function confirmDelete(reunionId) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Esta acción no se puede deshacer',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc2626',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            @this.deleteReunion(reunionId);
-        }
-    });
-}
-
-// Show success/error notifications
 document.addEventListener('DOMContentLoaded', function () {
-    @if (session()->has('success'))
-        Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: '{{ session("success") }}',
-            timer: 3000,
-            timerProgressBar: true,
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false
-        });
-    @endif
-
-    @if (session()->has('error'))
-        Swal.fire({
-            icon: 'error',
-            title: '¡Error!',
-            text: '{{ session("error") }}',
-            timer: 5000,
-            timerProgressBar: true,
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false
-        });
-    @endif
+    // Handle delete confirmation
+    window.confirmDelete = function(reunionId) {
+        // Find the Alpine component and set the data
+        const modal = document.querySelector('[x-data*="showDeleteModal"]');
+        if (modal) {
+            // Trigger Alpine to show modal
+            modal._x_dataStack[0].showDeleteModal = true;
+            modal._x_dataStack[0].reunionToDelete = reunionId;
+        }
+    };
+    
+    // Auto-hide success/error messages
+    const successMessage = document.querySelector('.bg-green-50');
+    const errorMessage = document.querySelector('.bg-red-50');
+    
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.style.transition = 'all 0.3s ease-out';
+            successMessage.style.opacity = '0';
+            successMessage.style.transform = 'translateY(-10px)';
+            setTimeout(() => successMessage.remove(), 300);
+        }, 5000);
+    }
+    
+    if (errorMessage) {
+        setTimeout(() => {
+            errorMessage.style.transition = 'all 0.3s ease-out';
+            errorMessage.style.opacity = '0';
+            errorMessage.style.transform = 'translateY(-10px)';
+            setTimeout(() => errorMessage.remove(), 300);
+        }, 8000);
+    }
 });
 </script>
+
+<style>
+[x-cloak] { display: none !important; }
+</style>
