@@ -141,7 +141,7 @@
             </div>
         </div>
 
-        <!-- Success Message with SweetAlert2 -->
+        <!-- Messages with SweetAlert2 -->
         @if (session('success'))
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -156,6 +156,44 @@
                         showConfirmButton: false,
                         background: '#f0fdf4',
                         color: '#166534'
+                    });
+                });
+            </script>
+        @endif
+
+        @if (session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: '{{ session('error') }}',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        background: '#fef2f2',
+                        color: '#dc2626'
+                    });
+                });
+            </script>
+        @endif
+
+        @if (session('warning'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '¡Atención!',
+                        text: '{{ session('warning') }}',
+                        timer: 4000,
+                        timerProgressBar: true,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        background: '#fffbeb',
+                        color: '#d97706'
                     });
                 });
             </script>
