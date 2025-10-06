@@ -17,6 +17,7 @@
         "alpinejs": "^3.15.0",
         "boxicons": "^2.1.4",
         "chart.js": "^4.5.0",
+        "sweetalert2": "^11.23.0",
         "vanilla-toast": "^0.5.0"
     }
 }
