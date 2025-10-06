@@ -1107,15 +1107,15 @@
                         }
                     });
                     
-                    // Create and submit form
+                    // Create and submit form with correct Laravel route
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = `/dashboard/reuniones/${reunionId}`;
+                    form.action = '{{ url("dashboard/reuniones") }}/' + reunionId;
                     
                     const csrfToken = document.createElement('input');
                     csrfToken.type = 'hidden';
                     csrfToken.name = '_token';
-                    csrfToken.value = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                    csrfToken.value = '{{ csrf_token() }}';
                     
                     const methodField = document.createElement('input');
                     methodField.type = 'hidden';
@@ -1125,7 +1125,11 @@
                     form.appendChild(csrfToken);
                     form.appendChild(methodField);
                     document.body.appendChild(form);
-                    form.submit();
+                    
+                    // Submit with error handling
+                    setTimeout(() => {
+                        form.submit();
+                    }, 800);
                 }
             });
         }
