@@ -142,4 +142,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/superadmin/solicitudes', SuperAdminSolicitudes::class)
         ->name('dashboard.superadmin.solicitudes')
         ->middleware('role:1');
+
+    // Ruta específica para el CRUD de reuniones usando Livewire
+    Route::get('/dashboard/reuniones-crud', \App\Livewire\Dashboard\ReunionCrud::class)
+        ->name('dashboard.reuniones.crud')
+        ->middleware('role:1,2'); // SuperAdmin y Admin pueden acceder
 });
