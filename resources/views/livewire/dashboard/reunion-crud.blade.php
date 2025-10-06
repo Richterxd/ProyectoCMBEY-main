@@ -123,30 +123,54 @@
                         </div>
                     </div>
                 @else
-                    <div class="overflow-x-auto">
-                        <table class="w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-group mr-2'></i>
                                         Reunión
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    </div>
+                                </th>
+                                <th scope="col"
+                                    class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-file-blank mr-2'></i>
                                         Solicitud
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    </div>
+                                </th>
+                                <th scope="col"
+                                    class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-buildings mr-2'></i>
                                         Institución
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    </div>
+                                </th>
+                                <th scope="col"
+                                    class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-calendar mr-2'></i>
                                         Fecha & Hora
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    </div>
+                                </th>
+                                <th scope="col"
+                                    class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-user-circle mr-2'></i>
                                         Asistentes
-                                    </th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    </div>
+                                </th>
+                                <th scope="col"
+                                    class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:px-6">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-cog mr-2'></i>
                                         Acciones
-                                    </th>
-                                </tr>
-                            </thead>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($reuniones as $reunion)
                                     <tr class="hover:bg-gray-50">
