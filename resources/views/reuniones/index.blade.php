@@ -371,33 +371,176 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-16 text-center">
-                                            <div class="flex flex-col items-center">
-                                                <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
-                                                    <i class='bx bx-calendar-x text-4xl text-gray-400'></i>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="px-8 py-20 text-center">
+                                                <div class="flex flex-col items-center animate-fade-in">
+                                                    <div class="relative mb-8">
+                                                        <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center shadow-xl">
+                                                            <i class='bx bx-calendar-x text-5xl text-gray-400'></i>
+                                                        </div>
+                                                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                                                            <i class='bx bx-plus text-white text-lg'></i>
+                                                        </div>
+                                                    </div>
+                                                    <h3 class="text-2xl font-bold text-gray-900 mb-3">No hay reuniones registradas</h3>
+                                                    <p class="text-gray-600 mb-8 max-w-md text-center leading-relaxed">
+                                                        Comience creando una nueva reunión para gestionar las actividades municipales y coordinar con las instituciones del municipio.
+                                                    </p>
+                                                    <a href="{{ route('dashboard.reuniones.create') }}" 
+                                                       class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white rounded-2xl hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105">
+                                                        <i class='bx bx-plus mr-3 text-2xl group-hover:rotate-90 transition-transform duration-300'></i>
+                                                        <span class="font-bold text-lg">Crear Primera Reunión</span>
+                                                    </a>
                                                 </div>
-                                                <h3 class="text-lg font-semibold text-gray-900 mb-2">No hay reuniones registradas</h3>
-                                                <p class="text-gray-500 mb-6 max-w-md">Comience creando una nueva reunión para gestionar las actividades municipales y coordinar con las instituciones.</p>
-                                                <a href="{{ route('dashboard.reuniones.create') }}" 
-                                                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                                                    <i class='bx bx-plus mr-2 text-lg'></i>
-                                                    Crear Primera Reunión
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-
-                        @if($reuniones->hasPages())
-                            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
-                                {{ $reuniones->links() }}
-                            </div>
-                        @endif
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+                    <!-- Card View (Hidden by default) -->
+                    <div id="cardViewContent" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        @forelse ($reuniones as $reunion)
+                            <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 overflow-hidden group reunionCard"
+                                 data-titulo="{{ strtolower($reunion->titulo) }}"
+                                 data-solicitud="{{ strtolower($reunion->solicitud->titulo ?? '') }}"
+                                 data-institucion="{{ strtolower($reunion->institucion->titulo ?? '') }}"
+                                 data-fecha="{{ $reunion->fecha_reunion->format('Y-m-d') }}">
+                                <!-- Card Header -->
+                                <div class="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 p-6 text-white">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-bold text-lg mb-2 leading-tight">{{ $reunion->titulo }}</h3>
+                                            <div class="flex items-center text-blue-100 text-sm">
+                                                <i class='bx bx-calendar mr-2'></i>
+                                                {{ $reunion->fecha_reunion->format('d/m/Y') }} - {{ $reunion->fecha_reunion->format('H:i') }}
+                                            </div>
+                                        </div>
+                                        <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                                            <i class='bx bx-group text-2xl'></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Card Content -->
+                                <div class="p-6 space-y-4">
+                                    <!-- Institution -->
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center">
+                                            <i class='bx bx-buildings text-purple-600'></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Institución</p>
+                                            <p class="font-semibold text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Request -->
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-green-100 to-green-200 rounded-xl flex items-center justify-center">
+                                            <i class='bx bx-file-blank text-green-600'></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Solicitud</p>
+                                            <p class="font-semibold text-gray-900 truncate" title="{{ $reunion->solicitud->titulo ?? 'N/A' }}">
+                                                {{ Str::limit($reunion->solicitud->titulo ?? 'N/A', 30) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Location -->
+                                    @if($reunion->ubicacion)
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-red-100 to-red-200 rounded-xl flex items-center justify-center">
+                                                <i class='bx bx-map-pin text-red-600'></i>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Ubicación</p>
+                                                <p class="font-semibold text-gray-900 truncate" title="{{ $reunion->ubicacion }}">
+                                                    {{ Str::limit($reunion->ubicacion, 30) }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    <!-- Participants -->
+                                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                        <div class="flex space-x-2">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">
+                                                <i class='bx bx-user mr-1'></i>
+                                                {{ $reunion->asistentes->count() }}
+                                            </span>
+                                            @if($reunion->concejal())
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                                                    <i class='bx bx-crown mr-1'></i>
+                                                    Concejal
+                                                </span>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Status Badge -->
+                                        @if($reunion->fecha_reunion->isToday())
+                                            <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse">HOY</span>
+                                        @elseif($reunion->fecha_reunion->isFuture())
+                                            <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-bold">PRÓXIMA</span>
+                                        @else
+                                            <span class="bg-gray-400 text-white text-xs px-3 py-1 rounded-full font-bold">PASADA</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <!-- Card Actions -->
+                                <div class="px-6 pb-6">
+                                    <div class="flex items-center justify-between space-x-3">
+                                        <a href="{{ route('dashboard.reuniones.show', $reunion) }}" 
+                                           class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-all duration-200 font-medium">
+                                            <i class='bx bx-show mr-2'></i>
+                                            Ver
+                                        </a>
+                                        <a href="{{ route('dashboard.reuniones.edit', $reunion) }}" 
+                                           class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-all duration-200 font-medium">
+                                            <i class='bx bx-edit mr-2'></i>
+                                            Editar
+                                        </a>
+                                        <button onclick="deleteReunion({{ $reunion->id }})"
+                                                class="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-span-full flex flex-col items-center py-20">
+                                <div class="w-24 h-24 bg-gray-100 rounded-3xl flex items-center justify-center mb-6">
+                                    <i class='bx bx-calendar-x text-4xl text-gray-400'></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">No hay reuniones</h3>
+                                <p class="text-gray-500 mb-6">Comienza creando tu primera reunión</p>
+                                <a href="{{ route('dashboard.reuniones.create') }}" 
+                                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:shadow-lg transition-all duration-200">
+                                    <i class='bx bx-plus mr-2'></i>
+                                    Crear Reunión
+                                </a>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <!-- Pagination -->
+                    @if($reuniones->hasPages())
+                        <div class="mt-8 px-8 py-6 border-t border-gray-200/50 bg-gray-50/50 rounded-b-3xl">
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-gray-600">
+                                    Mostrando {{ $reuniones->firstItem() }} a {{ $reuniones->lastItem() }} de {{ $reuniones->total() }} reuniones
+                                </div>
+                                <div class="custom-pagination">
+                                    {{ $reuniones->links() }}
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
