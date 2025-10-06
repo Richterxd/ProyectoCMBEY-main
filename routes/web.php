@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
     // Role-specific dashboard routes
 
     // Gestión de Reuniones usando Livewire (Administrador y SuperAdministrador)
-    Route::get('/dashboard/reuniones', SuperAdminReuniones::class)
+    Route::match(['get', 'post'], '/dashboard/reuniones', SuperAdminReuniones::class)
         ->name('dashboard.reuniones.index')
         ->middleware('role:1,2'); // URI: /dashboard/reuniones - RUTA PRINCIPAL CON LIVEWIRE
     
