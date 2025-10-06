@@ -297,7 +297,9 @@ class ReunionCrud extends Component
         $this->institucion_id = '';
         $this->asistentes = [];
         $this->concejal = '';
+        $this->nuevo_estado_solicitud = '';
         $this->editingReunion = null;
+        $this->selectedReunion = null;
         $this->resetValidation();
     }
 
