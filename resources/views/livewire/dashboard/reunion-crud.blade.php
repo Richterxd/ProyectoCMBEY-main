@@ -171,77 +171,96 @@
                                 </th>
                             </tr>
                         </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($reuniones as $reunion)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900">
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach($reuniones as $reunion)
+                                <tr class="hover:bg-gray-50 transition-all duration-200">
+                                    <td class="px-3 py-4 md:px-6">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                                                {{ substr($reunion->titulo, 0, 1) }}
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="text-sm font-semibold text-gray-900">
                                                     {{ $reunion->titulo }}
                                                 </div>
                                                 @if($reunion->ubicacion)
-                                                    <div class="text-sm text-gray-500">
-                                                        <i class='bx bx-map-pin mr-1'></i>{{ $reunion->ubicacion }}
+                                                    <div class="text-xs text-gray-500 mt-1 flex items-center">
+                                                        <i class='bx bx-map-pin mr-1 text-red-500'></i>
+                                                        {{ Str::limit($reunion->ubicacion, 40) }}
                                                     </div>
                                                 @endif
                                             </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $reunion->solicitud->titulo ?? 'N/A' }}</div>
-                                            @if($reunion->solicitud)
-                                                <div class="text-sm text-gray-500">ID: {{ $reunion->solicitud->solicitud_id }}</div>
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
-                                            <div class="text-sm text-gray-500">{{ $reunion->fecha_reunion->format('H:i') }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    <i class='bx bx-group mr-1'></i>{{ $reunion->asistentes->count() }} personas
+                                        </div>
+                                    </td>
+                                    <td class="px-3 py-4 md:px-6">
+                                        <div class="text-sm font-medium text-gray-900">{{ $reunion->solicitud->titulo ?? 'N/A' }}</div>
+                                        @if($reunion->solicitud)
+                                            <div class="text-xs text-gray-500 mt-1">ID: {{ $reunion->solicitud->solicitud_id }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="px-3 py-4 md:px-6">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+                                                <i class='bx bx-buildings text-white text-xs'></i>
+                                            </div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-3 py-4 md:px-6">
+                                        <div class="space-y-1">
+                                            <div class="text-sm font-semibold text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
+                                            <div class="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full inline-flex items-center">
+                                                <i class='bx bx-time mr-1'></i>
+                                                {{ $reunion->fecha_reunion->format('H:i') }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-3 py-4 md:px-6">
+                                        <div class="flex flex-wrap gap-1">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                <i class='bx bx-user mr-1'></i>{{ $reunion->asistentes->count() }}
+                                            </span>
+                                            @php
+                                                $concejal = $reunion->asistentes->where('pivot.es_concejal', true)->first();
+                                            @endphp
+                                            @if($concejal)
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <i class='bx bx-star mr-1'></i>Concejal
                                                 </span>
-                                                @php
-                                                    $concejal = $reunion->asistentes->where('pivot.es_concejal', true)->first();
-                                                @endphp
-                                                @if($concejal)
-                                                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                        <i class='bx bx-star mr-1'></i>Concejal
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <div class="flex items-center justify-end space-x-2">
-                                                <!-- View Button -->
-                                                <button wire:click="viewReunion({{ $reunion->id }})" 
-                                                        class="text-blue-600 hover:text-blue-900">
-                                                    <i class='bx bx-show'></i>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-3 py-4 md:px-6">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <!-- View Button -->
+                                            <button wire:click="viewReunion({{ $reunion->id }})" 
+                                                    class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200" 
+                                                    title="Ver detalles">
+                                                <i class='bx bx-show text-lg'></i>
+                                            </button>
+                                            
+                                            <!-- Edit Button -->
+                                            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                                <button wire:click="editReunion({{ $reunion->id }})" 
+                                                        class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200" 
+                                                        title="Editar">
+                                                    <i class='bx bx-edit text-lg'></i>
                                                 </button>
-                                                
-                                                <!-- Edit Button -->
-                                                @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
-                                                    <button wire:click="editReunion({{ $reunion->id }})" 
-                                                            class="text-blue-600 hover:text-blue-900">
-                                                        <i class='bx bx-edit'></i>
-                                                    </button>
-                                                @endif
-                                                
-                                                <!-- Delete Button -->
-                                                @if(Auth::user()->isSuperAdministrador())
-                                                    <button onclick="confirmDelete({{ $reunion->id }})" 
-                                                            class="text-red-600 hover:text-red-900">
-                                                        <i class='bx bx-trash'></i>
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                                            @endif
+                                            
+                                            <!-- Delete Button -->
+                                            @if(Auth::user()->isSuperAdministrador())
+                                                <button wire:click="deleteReunion({{ $reunion->id }})" 
+                                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200" 
+                                                        title="Eliminar">
+                                                    <i class='bx bx-trash text-lg'></i>
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                         </table>
                     </div>
                 @endif
