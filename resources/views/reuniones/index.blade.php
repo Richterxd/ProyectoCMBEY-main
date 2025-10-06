@@ -42,17 +42,23 @@
             </div>
         @endif
 
-        <!-- Content Section -->
+        <!-- Content Section - Enhanced -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-semibold text-gray-900">
-                            <i class='bx bx-calendar-event text-blue-600 mr-2'></i>
-                            Reuniones Registradas
-                        </h2>
-                        <div class="text-sm text-gray-500">
-                            Total: {{ $reuniones->total() }} reuniones
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class='bx bx-calendar-event text-blue-600 text-lg'></i>
+                            </div>
+                            <h2 class="text-xl font-semibold text-gray-900">
+                                Reuniones Registradas
+                            </h2>
+                        </div>
+                        <div class="bg-gray-50 px-3 py-1 rounded-full">
+                            <span class="text-sm text-gray-600 font-medium">
+                                Total: {{ $reuniones->total() }} reuniones
+                            </span>
                         </div>
                     </div>
 
