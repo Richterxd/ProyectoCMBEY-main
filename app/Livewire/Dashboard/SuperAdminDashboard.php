@@ -41,6 +41,9 @@ class SuperAdminDashboard extends Component
             ->orderBy('fecha_creacion', 'desc')
             ->get();
         $this->visitas = Visita::with(['persona', 'ambito'])->orderBy('fecha', 'desc')->get();
+        $this->reuniones = Reunion::with(['solicitud', 'institucion', 'asistentes'])
+            ->orderBy('fecha_reunion', 'desc')
+            ->get();
         $this->ambitos = Ambito::all();
         $this->instituciones = Institucion::all();
         $this->roles = Role::all();
