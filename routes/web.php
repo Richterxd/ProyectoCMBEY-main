@@ -20,7 +20,7 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
-Route::get('/login', LoginForm::class)->name('login')->middleware('guest');
+Route::match(['get', 'post'], '/login', LoginForm::class)->name('login')->middleware('guest');
 
 Route::get('/registro', RegisterForm::class)->name('registro')->middleware('guest');
 
