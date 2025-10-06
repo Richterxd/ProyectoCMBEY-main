@@ -1,42 +1,27 @@
 <x-layouts.rbac>
     @section('title', 'Gestión de Reuniones')
 
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <div class="min-h-screen bg-gray-50">
 
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20">
-        <!-- Enhanced Header Section with Animation -->
-        <div class="bg-white/80 backdrop-blur-sm shadow-xl border-b border-gray-200/50">
+        <div class="bg-white shadow-sm border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col md:flex-row md:justify-between md:items-center py-8">
-                    <div class="flex items-center mb-6 md:mb-0 animate-slide-in-left">
-                        <div class="flex items-center space-x-4">
-                            <div class="relative">
-                                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-300">
-                                    <i class='bx bx-group text-white text-3xl'></i>
-                                </div>
-                                <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                                    <i class='bx bx-check text-white text-sm'></i>
-                                </div>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center py-6">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                                <i class="bx bx-group text-xl text-white"></i>
                             </div>
                             <div>
-                                <h1 class="text-3xl font-bold text-gray-900 mb-1">Gestión de Reuniones</h1>
-                                <p class="text-sm text-gray-600 flex items-center">
-                                    <i class='bx bx-buildings mr-2 text-blue-600'></i>
-                                    Sistema Municipal CMBEY - Módulo Administrativo
-                                </p>
+                                <h1 class="text-2xl font-bold text-gray-900">Gestión de Reuniones</h1>
+                                <p class="text-sm text-gray-600">Sistema Municipal CMBEY</p>
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-4 animate-slide-in-right">
-                        <div class="hidden lg:flex items-center space-x-3 bg-blue-50 px-4 py-2 rounded-xl border border-blue-200">
-                            <i class='bx bx-calendar-event text-blue-600'></i>
-                            <span class="text-sm font-medium text-blue-800" id="current-date"></span>
-                        </div>
-                        <a href="{{ route('dashboard.reuniones.create') }}" 
-                           class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white rounded-xl hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105">
-                            <i class='bx bx-plus mr-3 text-xl group-hover:rotate-90 transition-transform duration-300'></i>
-                            <span class="font-semibold">Nueva Reunión</span>
+                    <div class="flex flex-col-reverse sm:flex-row items-center gap-3">
+                        <a href="{{ route('dashboard.reuniones.create') }}"
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                            <i class='bx bx-plus mr-2'></i>
+                            Nueva reunión
                         </a>
                     </div>
                 </div>
