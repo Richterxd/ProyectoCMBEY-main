@@ -387,87 +387,167 @@
                         </button>
                     </div>
                 
-                <div class="space-y-6">
-                    <!-- Basic Info -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->titulo }}</div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha y Hora</label>
-                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->fecha_reunion->format('d/m/Y H:i') }}</div>
-                        </div>
-                    </div>
+                    <div class="space-y-8">
+                        <!-- Basic Info Section -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class='bx bx-info-circle text-blue-600 text-xl'></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900">Información Básica</h3>
+                                    <p class="text-sm text-gray-600">Datos principales de la reunión</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Título</label>
+                                    <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-edit-alt text-blue-600 mr-2'></i>
+                                            <span class="font-medium text-gray-900">{{ $selectedReunion->titulo }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha y Hora</label>
+                                    <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-calendar text-blue-600 mr-2'></i>
+                                            <span class="font-medium text-gray-900">{{ $selectedReunion->fecha_reunion->format('d/m/Y H:i') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Solicitud</label>
-                            <div class="p-3 bg-gray-50 rounded-lg">
-                                {{ $selectedReunion->solicitud->titulo ?? 'N/A' }}
-                                @if($selectedReunion->solicitud)
-                                    <br><span class="text-sm text-gray-500">ID: {{ $selectedReunion->solicitud->solicitud_id }}</span>
+                            @if($selectedReunion->ubicacion)
+                                <div class="mt-6">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Ubicación</label>
+                                    <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-map-pin text-blue-600 mr-2'></i>
+                                            <span class="font-medium text-gray-900">{{ $selectedReunion->ubicacion }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Relations Section -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class='bx bx-link-alt text-green-600 text-xl'></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900">Relaciones</h3>
+                                    <p class="text-sm text-gray-600">Solicitud e institución asociadas</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Solicitud Asociada</label>
+                                    <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-file-blank text-green-600 mr-2'></i>
+                                            <div>
+                                                <span class="font-medium text-gray-900">{{ $selectedReunion->solicitud->titulo ?? 'N/A' }}</span>
+                                                @if($selectedReunion->solicitud)
+                                                    <div class="text-sm text-gray-500 mt-1">ID: {{ $selectedReunion->solicitud->solicitud_id }}</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Institución Responsable</label>
+                                    <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class='bx bx-buildings text-green-600 mr-2'></i>
+                                            <span class="font-medium text-gray-900">{{ $selectedReunion->institucion->titulo ?? 'N/A' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if($selectedReunion->descripcion)
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                        <i class='bx bx-detail text-purple-600 text-xl'></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-900">Descripción</h3>
+                                        <p class="text-sm text-gray-600">Objetivos y detalles de la reunión</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                                    <p class="text-gray-900 leading-relaxed">{{ $selectedReunion->descripcion }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Participants Section -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                                        <i class='bx bx-group text-indigo-600 text-xl'></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-900">Participantes</h3>
+                                        <p class="text-sm text-gray-600">Asistentes confirmados para la reunión</p>
+                                    </div>
+                                </div>
+                                <div class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
+                                    {{ $selectedReunion->asistentes->count() }} personas
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @foreach($selectedReunion->asistentes as $asistente)
+                                    <div class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg {{ $asistente->pivot->es_concejal ? 'ring-2 ring-green-200' : '' }}">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                                {{ substr($asistente->nombre, 0, 1) }}{{ substr($asistente->apellido, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-gray-900">{{ $asistente->nombre }} {{ $asistente->apellido }}</div>
+                                                <div class="text-sm text-gray-500">C.I: {{ number_format($asistente->cedula, 0, '.', '.') }}</div>
+                                            </div>
+                                        </div>
+                                        @if($asistente->pivot->es_concejal)
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                                <i class='bx bx-crown mr-1'></i>Concejal
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+                            <button wire:click="setActiveTab('list')" 
+                                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                                <i class='bx bx-arrow-back mr-2'></i>
+                                Volver a la Lista
+                            </button>
+                            
+                            <div class="flex space-x-3">
+                                @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                    <button wire:click="editReunion({{ $selectedReunion->id }})" 
+                                            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                                        <i class='bx bx-edit mr-2'></i>
+                                        Editar Reunión
+                                    </button>
                                 @endif
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Institución</label>
-                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->institucion->titulo ?? 'N/A' }}</div>
-                        </div>
                     </div>
-
-                    @if($selectedReunion->ubicacion)
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
-                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->ubicacion }}</div>
-                        </div>
-                    @endif
-
-                    @if($selectedReunion->descripcion)
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->descripcion }}</div>
-                        </div>
-                    @endif
-
-                    <!-- Asistentes -->
-                    <div class="border-t pt-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Asistentes ({{ $selectedReunion->asistentes->count() }})</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            @foreach($selectedReunion->asistentes as $asistente)
-                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                    <div>
-                                        <div class="font-medium text-gray-900">{{ $asistente->nombre }} {{ $asistente->apellido }}</div>
-                                        <div class="text-sm text-gray-500">{{ $asistente->cedula }}</div>
-                                    </div>
-                                    @if($asistente->pivot->es_concejal)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            <i class='bx bx-star mr-1'></i>Concejal
-                                        </span>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex justify-between items-center pt-6 border-t">
-                        <button wire:click="setActiveTab('list')" 
-                                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                            Volver a la Lista
-                        </button>
-                        
-                        <div class="flex space-x-3">
-                            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
-                                <button wire:click="editReunion({{ $selectedReunion->id }})" 
-                                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                    <i class='bx bx-edit mr-2'></i>
-                                    Editar Reunión
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     @endif
