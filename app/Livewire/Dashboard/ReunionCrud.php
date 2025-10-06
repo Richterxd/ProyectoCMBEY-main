@@ -186,6 +186,15 @@ class ReunionCrud extends Component
             
             $reunion->asistentes()->sync($asistentesData);
             
+            // Update parent solicitud status if requested
+            if (!empty($this->nuevo_estado_solicitud)) {
+                $solicitud = Solicitud::find($this->solicitud_id);
+                if ($solicitud) {
+                    $solicitud->estado_detallado = $this->nuevo_estado_solicitud;
+                    $solicitud->save();
+                }
+            }
+            
             $this->resetForm();
             $this->activeTab = 'list';
             $this->loadReuniones();
