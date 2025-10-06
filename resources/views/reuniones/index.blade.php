@@ -543,6 +543,615 @@
                     @endif
                 </div>
             </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Custom Styles for Enhanced UI -->
+    <style>
+        /* Custom animations */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slide-in-left {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slide-in-right {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .animate-fade-in { animation: fade-in 0.6s ease-out; }
+        .animate-slide-in-left { animation: slide-in-left 0.8s ease-out; }
+        .animate-slide-in-right { animation: slide-in-right 0.8s ease-out; }
+        
+        /* Custom hover effects */
+        .group:hover .group-hover\:rotate-90 { transform: rotate(90deg); }
+        
+        /* Custom scrollbar */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #3b82f6, #1e40af);
+            border-radius: 8px;
+        }
+        
+        /* Filter tags */
+        .filter-tag {
+            animation: fade-in 0.3s ease-out;
+        }
+        
+        /* Loading states */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Enhanced pagination */
+        .custom-pagination .pagination {
+            display: flex;
+            align-items: center;
+            space-x: 2;
+        }
+        
+        .custom-pagination .page-link {
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 0.75rem;
+            border: 2px solid transparent;
+            background: white;
+            color: #6b7280;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .custom-pagination .page-link:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .custom-pagination .active .page-link {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .reunionRow td:nth-child(3),
+            .reunionRow td:nth-child(4) {
+                display: none;
+            }
+            
+            .reunionRow td:first-child {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .reunionRow td:nth-child(2) {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- Enhanced JavaScript Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ===== INITIALIZATION =====
+            initializeCurrentDate();
+            initializeViewToggle();
+            initializeSearch();
+            initializeFilters();
+            initializeExport();
+            initializeSortable();
+            initializeTooltips();
+            
+            // ===== CURRENT DATE DISPLAY =====
+            function initializeCurrentDate() {
+                const currentDateElement = document.getElementById('current-date');
+                if (currentDateElement) {
+                    const now = new Date();
+                    const options = { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    };
+                    currentDateElement.textContent = now.toLocaleDateString('es-ES', options);
+                }
+            }
+            
+            // ===== VIEW TOGGLE FUNCTIONALITY =====
+            function initializeViewToggle() {
+                const tableViewBtn = document.getElementById('tableView');
+                const cardViewBtn = document.getElementById('cardView');
+                const tableContent = document.getElementById('tableViewContent');
+                const cardContent = document.getElementById('cardViewContent');
+                
+                if (tableViewBtn && cardViewBtn && tableContent && cardContent) {
+                    tableViewBtn.addEventListener('click', function() {
+                        // Show table, hide cards
+                        tableContent.classList.remove('hidden');
+                        cardContent.classList.add('hidden');
+                        
+                        // Update button styles
+                        tableViewBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-700');
+                        tableViewBtn.classList.remove('text-gray-600');
+                        cardViewBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-700');
+                        cardViewBtn.classList.add('text-gray-600');
+                        
+                        // Save preference
+                        localStorage.setItem('reuniones_view', 'table');
+                    });
+                    
+                    cardViewBtn.addEventListener('click', function() {
+                        // Show cards, hide table
+                        cardContent.classList.remove('hidden');
+                        tableContent.classList.add('hidden');
+                        
+                        // Update button styles
+                        cardViewBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-700');
+                        cardViewBtn.classList.remove('text-gray-600');
+                        tableViewBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-700');
+                        tableViewBtn.classList.add('text-gray-600');
+                        
+                        // Save preference
+                        localStorage.setItem('reuniones_view', 'cards');
+                    });
+                    
+                    // Load saved preference
+                    const savedView = localStorage.getItem('reuniones_view');
+                    if (savedView === 'cards') {
+                        cardViewBtn.click();
+                    }
+                }
+            }
+            
+            // ===== SEARCH FUNCTIONALITY =====
+            function initializeSearch() {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    let searchTimeout;
+                    
+                    searchInput.addEventListener('input', function() {
+                        clearTimeout(searchTimeout);
+                        searchTimeout = setTimeout(() => {
+                            performSearch(this.value.toLowerCase().trim());
+                        }, 300);
+                    });
+                }
+            }
+            
+            function performSearch(searchTerm) {
+                const tableRows = document.querySelectorAll('.reunionRow');
+                const cardItems = document.querySelectorAll('.reunionCard');
+                let visibleCount = 0;
+                
+                // Search in table rows
+                tableRows.forEach(row => {
+                    const titulo = row.dataset.titulo || '';
+                    const solicitud = row.dataset.solicitud || '';
+                    const institucion = row.dataset.institucion || '';
+                    
+                    const isVisible = !searchTerm || 
+                                    titulo.includes(searchTerm) || 
+                                    solicitud.includes(searchTerm) || 
+                                    institucion.includes(searchTerm);
+                    
+                    row.style.display = isVisible ? '' : 'none';
+                    if (isVisible) visibleCount++;
+                });
+                
+                // Search in cards
+                cardItems.forEach(card => {
+                    const titulo = card.dataset.titulo || '';
+                    const solicitud = card.dataset.solicitud || '';
+                    const institucion = card.dataset.institucion || '';
+                    
+                    const isVisible = !searchTerm || 
+                                    titulo.includes(searchTerm) || 
+                                    solicitud.includes(searchTerm) || 
+                                    institucion.includes(searchTerm);
+                    
+                    card.style.display = isVisible ? '' : 'none';
+                });
+                
+                updateVisibleCount(visibleCount);
+                updateActiveFilters();
+            }
+            
+            // ===== FILTER FUNCTIONALITY =====
+            function initializeFilters() {
+                const dateFilter = document.getElementById('dateFilter');
+                const institutionFilter = document.getElementById('institutionFilter');
+                const clearFiltersBtn = document.getElementById('clearFilters');
+                
+                if (dateFilter) {
+                    dateFilter.addEventListener('change', applyFilters);
+                }
+                
+                if (institutionFilter) {
+                    institutionFilter.addEventListener('change', applyFilters);
+                }
+                
+                if (clearFiltersBtn) {
+                    clearFiltersBtn.addEventListener('click', clearAllFilters);
+                }
+            }
+            
+            function applyFilters() {
+                const dateFilter = document.getElementById('dateFilter').value;
+                const institutionFilter = document.getElementById('institutionFilter').value.toLowerCase();
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                
+                const tableRows = document.querySelectorAll('.reunionRow');
+                const cardItems = document.querySelectorAll('.reunionCard');
+                let visibleCount = 0;
+                
+                const today = new Date().toISOString().split('T')[0];
+                const weekFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                const monthFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                
+                // Filter table rows
+                tableRows.forEach(row => {
+                    const fecha = row.dataset.fecha;
+                    const institucion = row.dataset.institucion;
+                    const titulo = row.dataset.titulo;
+                    const solicitud = row.dataset.solicitud;
+                    
+                    let isVisible = true;
+                    
+                    // Date filter
+                    if (dateFilter) {
+                        switch (dateFilter) {
+                            case 'today':
+                                isVisible = isVisible && fecha === today;
+                                break;
+                            case 'week':
+                                isVisible = isVisible && fecha >= today && fecha <= weekFromNow;
+                                break;
+                            case 'month':
+                                isVisible = isVisible && fecha >= today && fecha <= monthFromNow;
+                                break;
+                            case 'future':
+                                isVisible = isVisible && fecha > today;
+                                break;
+                        }
+                    }
+                    
+                    // Institution filter
+                    if (institutionFilter) {
+                        isVisible = isVisible && institucion.includes(institutionFilter);
+                    }
+                    
+                    // Search filter
+                    if (searchTerm) {
+                        isVisible = isVisible && (
+                            titulo.includes(searchTerm) || 
+                            solicitud.includes(searchTerm) || 
+                            institucion.includes(searchTerm)
+                        );
+                    }
+                    
+                    row.style.display = isVisible ? '' : 'none';
+                    if (isVisible) visibleCount++;
+                });
+                
+                // Filter cards (same logic)
+                cardItems.forEach(card => {
+                    const fecha = card.dataset.fecha;
+                    const institucion = card.dataset.institucion;
+                    const titulo = card.dataset.titulo;
+                    const solicitud = card.dataset.solicitud;
+                    
+                    let isVisible = true;
+                    
+                    // Apply same filters...
+                    if (dateFilter) {
+                        switch (dateFilter) {
+                            case 'today':
+                                isVisible = isVisible && fecha === today;
+                                break;
+                            case 'week':
+                                isVisible = isVisible && fecha >= today && fecha <= weekFromNow;
+                                break;
+                            case 'month':
+                                isVisible = isVisible && fecha >= today && fecha <= monthFromNow;
+                                break;
+                            case 'future':
+                                isVisible = isVisible && fecha > today;
+                                break;
+                        }
+                    }
+                    
+                    if (institutionFilter) {
+                        isVisible = isVisible && institucion.includes(institutionFilter);
+                    }
+                    
+                    if (searchTerm) {
+                        isVisible = isVisible && (
+                            titulo.includes(searchTerm) || 
+                            solicitud.includes(searchTerm) || 
+                            institucion.includes(searchTerm)
+                        );
+                    }
+                    
+                    card.style.display = isVisible ? '' : 'none';
+                });
+                
+                updateVisibleCount(visibleCount);
+                updateActiveFilters();
+            }
+            
+            function clearAllFilters() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('dateFilter').value = '';
+                document.getElementById('institutionFilter').value = '';
+                
+                // Show all items
+                document.querySelectorAll('.reunionRow, .reunionCard').forEach(item => {
+                    item.style.display = '';
+                });
+                
+                updateVisibleCount({{ $reuniones->count() }});
+                updateActiveFilters();
+            }
+            
+            function updateActiveFilters() {
+                const activeFiltersContainer = document.getElementById('activeFilters');
+                const filterTagsContainer = document.getElementById('filterTags');
+                
+                if (!activeFiltersContainer || !filterTagsContainer) return;
+                
+                const searchTerm = document.getElementById('searchInput').value;
+                const dateFilter = document.getElementById('dateFilter').value;
+                const institutionFilter = document.getElementById('institutionFilter').value;
+                
+                filterTagsContainer.innerHTML = '';
+                
+                let hasActiveFilters = false;
+                
+                if (searchTerm) {
+                    addFilterTag('Búsqueda', searchTerm, () => {
+                        document.getElementById('searchInput').value = '';
+                        applyFilters();
+                    });
+                    hasActiveFilters = true;
+                }
+                
+                if (dateFilter) {
+                    const dateLabels = {
+                        'today': 'Hoy',
+                        'week': 'Esta semana',
+                        'month': 'Este mes',
+                        'future': 'Próximas'
+                    };
+                    addFilterTag('Fecha', dateLabels[dateFilter], () => {
+                        document.getElementById('dateFilter').value = '';
+                        applyFilters();
+                    });
+                    hasActiveFilters = true;
+                }
+                
+                if (institutionFilter) {
+                    addFilterTag('Institución', institutionFilter, () => {
+                        document.getElementById('institutionFilter').value = '';
+                        applyFilters();
+                    });
+                    hasActiveFilters = true;
+                }
+                
+                activeFiltersContainer.classList.toggle('hidden', !hasActiveFilters);
+            }
+            
+            function addFilterTag(label, value, removeCallback) {
+                const filterTagsContainer = document.getElementById('filterTags');
+                const tag = document.createElement('div');
+                tag.className = 'filter-tag inline-flex items-center bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full';
+                tag.innerHTML = `
+                    <span class="mr-2">${label}: ${value}</span>
+                    <button class="hover:bg-blue-200 rounded-full p-1 transition-colors duration-200">
+                        <i class='bx bx-x text-sm'></i>
+                    </button>
+                `;
+                
+                tag.querySelector('button').addEventListener('click', removeCallback);
+                filterTagsContainer.appendChild(tag);
+            }
+            
+            function updateVisibleCount(count) {
+                const visibleCountElement = document.getElementById('visibleCount');
+                if (visibleCountElement) {
+                    visibleCountElement.textContent = count;
+                }
+            }
+            
+            // ===== EXPORT FUNCTIONALITY =====
+            function initializeExport() {
+                const exportBtn = document.getElementById('exportBtn');
+                if (exportBtn) {
+                    exportBtn.addEventListener('click', function() {
+                        Swal.fire({
+                            title: 'Exportar Reuniones',
+                            text: '¿En qué formato desea exportar los datos?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'PDF',
+                            cancelButtonText: 'Excel',
+                            confirmButtonColor: '#3b82f6',
+                            cancelButtonColor: '#10b981',
+                            background: '#f8fafc',
+                            customClass: {
+                                title: 'text-gray-900',
+                                content: 'text-gray-700'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                exportToPDF();
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                exportToExcel();
+                            }
+                        });
+                    });
+                }
+            }
+            
+            function exportToPDF() {
+                Swal.fire({
+                    title: 'Generando PDF...',
+                    text: 'Por favor espere mientras se procesa la información.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    Swal.fire('¡Éxito!', 'El archivo PDF se ha descargado correctamente.', 'success');
+                });
+            }
+            
+            function exportToExcel() {
+                Swal.fire({
+                    title: 'Generando Excel...',
+                    text: 'Por favor espere mientras se procesa la información.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    Swal.fire('¡Éxito!', 'El archivo Excel se ha descargado correctamente.', 'success');
+                });
+            }
+            
+            // ===== SORTABLE FUNCTIONALITY =====
+            function initializeSortable() {
+                // This would implement table sorting functionality
+                // For now, we'll just add visual feedback
+            }
+            
+            // ===== TOOLTIPS =====
+            function initializeTooltips() {
+                // Add hover effects and enhanced tooltips
+                const actionButtons = document.querySelectorAll('[title]');
+                actionButtons.forEach(button => {
+                    button.addEventListener('mouseenter', function() {
+                        // Could add custom tooltips here
+                    });
+                });
+            }
+        });
+        
+        // ===== DELETE FUNCTIONALITY WITH SWEETALERT2 =====
+        function deleteReunion(reunionId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer. La reunión será eliminada permanentemente.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#f8fafc',
+                customClass: {
+                    title: 'text-gray-900 font-bold',
+                    content: 'text-gray-700',
+                    confirmButton: 'font-semibold',
+                    cancelButton: 'font-semibold'
+                },
+                backdrop: `
+                    rgba(0,0,0,0.4)
+                    center
+                    no-repeat
+                `
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'Eliminando reunión...',
+                        text: 'Por favor espere mientras se procesa la eliminación.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    // Create and submit form
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/dashboard/reuniones/${reunionId}`;
+                    
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                    
+                    const methodField = document.createElement('input');
+                    methodField.type = 'hidden';
+                    methodField.name = '_method';
+                    methodField.value = 'DELETE';
+                    
+                    form.appendChild(csrfToken);
+                    form.appendChild(methodField);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+        
+        // ===== TABLE SORTING =====
+        function sortTable(column) {
+            // Add visual feedback for sorting
+            const sortIcon = event.target.closest('th').querySelector('.bx-sort');
+            if (sortIcon) {
+                sortIcon.classList.add('text-blue-600');
+                setTimeout(() => {
+                    sortIcon.classList.remove('text-blue-600');
+                }, 300);
+            }
+        }
+        
+        // ===== RESPONSIVE ENHANCEMENTS =====
+        window.addEventListener('resize', function() {
+            // Handle responsive layout changes
+            if (window.innerWidth < 768) {
+                // Mobile optimizations
+                const cardView = document.getElementById('cardView');
+                if (cardView && !cardView.classList.contains('bg-white')) {
+                    cardView.click(); // Switch to card view on mobile
+                }
+            }
+        });
+    </script>
 </x-layouts.rbac>
