@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Dashboard\SuperAdminTrabajadores;
 use App\Livewire\Dashboard\SuperadminUsuarios;
 use App\Livewire\Dashboard\SuperAdminVisitas;
+use App\Livewire\Dashboard\SuperAdminReuniones;
 // IMPORTACIÓN AÑADIDA: Necesaria si el controlador no se referencia con el namespace completo
 use App\Http\Controllers\ReunionController; 
 
