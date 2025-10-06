@@ -248,6 +248,14 @@
                                                 </button>
                                             @endif
                                             
+                                            <!-- PDF Button -->
+                                            <a href="{{ route('dashboard.reuniones.pdf', $reunion->id) }}" 
+                                               target="_blank"
+                                               class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200" 
+                                               title="Descargar PDF">
+                                                <i class='bx bx-file-pdf text-lg'></i>
+                                            </a>
+
                                             <!-- Delete Button -->
                                             @if(Auth::user()->isSuperAdministrador())
                                                 <button wire:click="deleteReunion({{ $reunion->id }})" 
