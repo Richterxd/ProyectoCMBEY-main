@@ -67,6 +67,13 @@ class UsuarioDashboard extends Component
             ->orderBy('fecha', 'desc')
             ->get();
             
+        $this->reuniones = Reunion::with(['solicitud', 'institucion', 'asistentes'])
+            ->whereHas('solicitud', function($query) {
+                $query->where('persona_cedula', Auth::user()->persona_cedula);
+            })
+            ->orderBy('fecha_reunion', 'desc')
+            ->get();
+            
         $this->ambitos = Ambito::all();
     }
 
