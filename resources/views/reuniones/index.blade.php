@@ -158,19 +158,19 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <td class="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center justify-end space-x-2">
                                                 <!-- Ver -->
                                                 <a href="{{ route('dashboard.reuniones.show', $reunion) }}" 
-                                                   class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" 
+                                                   class="p-2.5 text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 hover:shadow-md transform hover:scale-105" 
                                                    title="Ver detalles">
-                                                    <i class='bx bx-show'></i>
+                                                    <i class='bx bx-show text-lg'></i>
                                                 </a>
                                                 <!-- Editar -->
                                                 <a href="{{ route('dashboard.reuniones.edit', $reunion) }}" 
-                                                   class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" 
+                                                   class="p-2.5 text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200 hover:shadow-md transform hover:scale-105" 
                                                    title="Editar">
-                                                    <i class='bx bx-edit'></i>
+                                                    <i class='bx bx-edit text-lg'></i>
                                                 </a>
                                                 <!-- Eliminar -->
                                                 <form action="{{ route('dashboard.reuniones.destroy', $reunion) }}" 
@@ -180,9 +180,9 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" 
-                                                            class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+                                                            class="p-2.5 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 hover:shadow-md transform hover:scale-105" 
                                                             title="Eliminar">
-                                                        <i class='bx bx-trash'></i>
+                                                        <i class='bx bx-trash text-lg'></i>
                                                     </button>
                                                 </form>
                                             </div>
