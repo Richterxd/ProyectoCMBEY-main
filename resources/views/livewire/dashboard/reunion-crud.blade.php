@@ -1,22 +1,52 @@
 <div class="min-h-screen bg-gray-50">
-    <!-- Tab Navigation -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="flex border-b border-gray-200">
-            <button wire:click="setActiveTab('list')" 
-                    class="px-6 py-3 text-sm font-medium border-b-2 {{ $activeTab === 'list' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                <i class='bx bx-list-ul mr-2'></i>
-                Lista de Reuniones
-            </button>
-            
-            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
-                <button wire:click="setActiveTab('create')" 
-                        class="px-6 py-3 text-sm font-medium border-b-2 {{ $activeTab === 'create' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                    <i class='bx bx-plus mr-2'></i>
-                    Nueva Reunión
-                </button>
-            @endif
+
+    <!-- Enhanced Header Section -->
+    <div class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center py-6">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                            <i class="bx bx-group text-xl text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Gestión de Reuniones</h1>
+                            <p class="text-sm text-gray-600">Sistema Municipal CMBEY</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col-reverse sm:flex-row items-center gap-3">
+                    @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                        <button wire:click="setActiveTab('create')"
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                            <i class='bx bx-plus mr-2'></i>
+                            Nueva Reunión
+                        </button>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Tab Navigation -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="flex border-b border-gray-200">
+                <button wire:click="setActiveTab('list')" 
+                        class="px-6 py-3 text-sm font-medium border-b-2 {{ $activeTab === 'list' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                    <i class='bx bx-list-ul mr-2'></i>
+                    Lista de Reuniones
+                </button>
+                
+                @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                    <button wire:click="setActiveTab('create')" 
+                            class="px-6 py-3 text-sm font-medium border-b-2 {{ $activeTab === 'create' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                        <i class='bx bx-plus mr-2'></i>
+                        Nueva Reunión
+                    </button>
+                @endif
+            </div>
+        </div>
 
     <!-- Content -->
     @if($activeTab === 'list')
