@@ -1,0 +1,401 @@
+<div class="min-h-screen bg-gray-50">
+    <!-- Tab Navigation -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div class="flex border-b border-gray-200">
+            <button wire:click="setActiveTab('list')" 
+                    class="px-6 py-3 text-sm font-medium border-b-2 {{ $activeTab === 'list' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                <i class='bx bx-list-ul mr-2'></i>
+                Lista de Reuniones
+            </button>
+            
+            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                <button wire:click="setActiveTab('create')" 
+                        class="px-6 py-3 text-sm font-medium border-b-2 {{ $activeTab === 'create' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                    <i class='bx bx-plus mr-2'></i>
+                    Nueva Reunión
+                </button>
+            @endif
+        </div>
+    </div>
+
+    <!-- Content -->
+    @if($activeTab === 'list')
+        <!-- Reuniones List -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900">
+                        @if(Auth::user()->isSuperAdministrador())
+                            Todas las Reuniones
+                        @elseif(Auth::user()->isAdministrador())
+                            Gestión de Reuniones
+                        @else
+                            Mis Reuniones
+                        @endif
+                    </h2>
+                    <span class="text-sm text-gray-500">{{ $reuniones->count() }} reuniones</span>
+                </div>
+
+                @if($reuniones->isEmpty())
+                    <div class="text-center py-8">
+                        <i class='bx bx-calendar-x text-4xl text-gray-400 mb-4'></i>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">No hay reuniones</h3>
+                        <p class="text-gray-500">
+                            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                Crea la primera reunión para comenzar a gestionar las actividades municipales
+                            @else
+                                No se han programado reuniones relacionadas a tus solicitudes
+                            @endif
+                        </p>
+                    </div>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Reunión
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Solicitud
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Institución
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Fecha & Hora
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Asistentes
+                                    </th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($reuniones as $reunion)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">
+                                                    {{ $reunion->titulo }}
+                                                </div>
+                                                @if($reunion->ubicacion)
+                                                    <div class="text-sm text-gray-500">
+                                                        <i class='bx bx-map-pin mr-1'></i>{{ $reunion->ubicacion }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{{ $reunion->solicitud->titulo ?? 'N/A' }}</div>
+                                            @if($reunion->solicitud)
+                                                <div class="text-sm text-gray-500">ID: {{ $reunion->solicitud->solicitud_id }}</div>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{{ $reunion->institucion->titulo ?? 'N/A' }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{{ $reunion->fecha_reunion->format('d/m/Y') }}</div>
+                                            <div class="text-sm text-gray-500">{{ $reunion->fecha_reunion->format('H:i') }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    <i class='bx bx-group mr-1'></i>{{ $reunion->asistentes->count() }} personas
+                                                </span>
+                                                @php
+                                                    $concejal = $reunion->asistentes->where('pivot.es_concejal', true)->first();
+                                                @endphp
+                                                @if($concejal)
+                                                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        <i class='bx bx-star mr-1'></i>Concejal
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <div class="flex items-center justify-end space-x-2">
+                                                <!-- View Button -->
+                                                <button wire:click="viewReunion({{ $reunion->id }})" 
+                                                        class="text-blue-600 hover:text-blue-900">
+                                                    <i class='bx bx-show'></i>
+                                                </button>
+                                                
+                                                <!-- Edit Button -->
+                                                @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                                    <button wire:click="editReunion({{ $reunion->id }})" 
+                                                            class="text-blue-600 hover:text-blue-900">
+                                                        <i class='bx bx-edit'></i>
+                                                    </button>
+                                                @endif
+                                                
+                                                <!-- Delete Button -->
+                                                @if(Auth::user()->isSuperAdministrador())
+                                                    <button onclick="confirmDelete({{ $reunion->id }})" 
+                                                            class="text-red-600 hover:text-red-900">
+                                                        <i class='bx bx-trash'></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endif
+
+    @if($activeTab === 'create')
+        <!-- Create New Reunion -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900">Nueva Reunión</h1>
+                            <p class="mt-2 text-gray-600">Complete todos los campos para programar una nueva reunión</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                <i class='bx bx-check-circle mr-1'></i>
+                                Reunión Completa
+                            </div>
+                            <button wire:click="setActiveTab('list')" 
+                               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class='bx bx-arrow-back mr-1'></i>
+                                Volver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    1
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Información Básica</span>
+                            </div>
+                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    2
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Relaciones</span>
+                            </div>
+                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    3
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Participantes</span>
+                            </div>
+                            <div class="w-16 h-1 bg-blue-600 rounded"></div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    4
+                                </div>
+                                <span class="ml-2 text-sm font-medium text-blue-600">Confirmación</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form wire:submit.prevent="createReunion">
+                    @include('livewire.dashboard.components.reunion-form')
+                </form>
+            </div>
+        </div>
+    @endif
+
+    @if($activeTab === 'edit' && $editingReunion)
+        <!-- Edit Reunion -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900">Editar Reunión</h1>
+                            <p class="mt-2 text-gray-600">Modifique los datos de la reunión</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                <i class='bx bx-edit mr-1'></i>
+                                Editando
+                            </div>
+                            <button wire:click="setActiveTab('list')" 
+                               class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class='bx bx-arrow-back mr-1'></i>
+                                Volver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <form wire:submit.prevent="updateReunion">
+                    @include('livewire.dashboard.components.reunion-form', ['isEditing' => true])
+                </form>
+            </div>
+        </div>
+    @endif
+
+    @if($activeTab === 'view' && $selectedReunion)
+        <!-- View Reunion Details -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-900">Detalles de la Reunión</h2>
+                        <p class="text-gray-600">Información completa de la reunión</p>
+                    </div>
+                    <button wire:click="setActiveTab('list')" 
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                        <i class='bx bx-arrow-back mr-1'></i>
+                        Volver a la Lista
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Basic Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->titulo }}</div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha y Hora</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->fecha_reunion->format('d/m/Y H:i') }}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Solicitud</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                {{ $selectedReunion->solicitud->titulo ?? 'N/A' }}
+                                @if($selectedReunion->solicitud)
+                                    <br><span class="text-sm text-gray-500">ID: {{ $selectedReunion->solicitud->solicitud_id }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Institución</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->institucion->titulo ?? 'N/A' }}</div>
+                        </div>
+                    </div>
+
+                    @if($selectedReunion->ubicacion)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->ubicacion }}</div>
+                        </div>
+                    @endif
+
+                    @if($selectedReunion->descripcion)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                            <div class="p-3 bg-gray-50 rounded-lg">{{ $selectedReunion->descripcion }}</div>
+                        </div>
+                    @endif
+
+                    <!-- Asistentes -->
+                    <div class="border-t pt-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Asistentes ({{ $selectedReunion->asistentes->count() }})</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach($selectedReunion->asistentes as $asistente)
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <div class="font-medium text-gray-900">{{ $asistente->nombre }} {{ $asistente->apellido }}</div>
+                                        <div class="text-sm text-gray-500">{{ $asistente->cedula }}</div>
+                                    </div>
+                                    @if($asistente->pivot->es_concejal)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <i class='bx bx-star mr-1'></i>Concejal
+                                        </span>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-between items-center pt-6 border-t">
+                        <button wire:click="setActiveTab('list')" 
+                                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Volver a la Lista
+                        </button>
+                        
+                        <div class="flex space-x-3">
+                            @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                <button wire:click="editReunion({{ $selectedReunion->id }})" 
+                                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <i class='bx bx-edit mr-2'></i>
+                                    Editar Reunión
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
+
+<!-- SweetAlert2 Script for confirmations -->
+<script>
+function confirmDelete(reunionId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            @this.deleteReunion(reunionId);
+        }
+    });
+}
+
+// Show success/error notifications
+document.addEventListener('DOMContentLoaded', function () {
+    @if (session()->has('success'))
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session("success") }}',
+            timer: 3000,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    @endif
+
+    @if (session()->has('error'))
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '{{ session("error") }}',
+            timer: 5000,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    @endif
+});
+</script>
