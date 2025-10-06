@@ -11,7 +11,7 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
                 <div class="flex items-center">
                     <i class='bx bx-file-blank text-3xl mr-4 text-gray-400'></i>
@@ -36,6 +36,15 @@
                     <div>
                         <h3 class="text-2xl font-bold">{{ $solicitudes->where('estado_detallado', 'Pendiente')->count() }}</h3>
                         <p class="text-blue-100">Pendientes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-r from-blue-800 to-blue-900 rounded-xl p-6 text-white shadow-lg">
+                <div class="flex items-center">
+                    <i class='bx bx-calendar-event text-3xl mr-4 text-green-400'></i>
+                    <div>
+                        <h3 class="text-2xl font-bold">{{ $reuniones->count() }}</h3>
+                        <p class="text-blue-100">Reuniones Programadas</p>
                     </div>
                 </div>
             </div>
