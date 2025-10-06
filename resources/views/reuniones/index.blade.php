@@ -46,63 +46,33 @@
                     </div>
                 </div>
 
-        <!-- Messages with SweetAlert2 -->
-        @if (session('success'))
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: '{{ session('success') }}',
-                        timer: 3000,
-                        timerProgressBar: true,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        background: '#f0fdf4',
-                        color: '#166534'
-                    });
-                });
-            </script>
-        @endif
+                <!-- Messages -->
+                @if (session('success'))
+                    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="flex items-center">
+                            <i class='bx bx-check-circle text-green-600 text-xl mr-3'></i>
+                            <p class="text-green-800 font-medium">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                @endif
 
-        @if (session('error'))
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '¡Error!',
-                        text: '{{ session('error') }}',
-                        timer: 5000,
-                        timerProgressBar: true,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        background: '#fef2f2',
-                        color: '#dc2626'
-                    });
-                });
-            </script>
-        @endif
+                @if (session('error'))
+                    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex items-center">
+                            <i class='bx bx-x-circle text-red-600 text-xl mr-3'></i>
+                            <p class="text-red-800 font-medium">{{ session('error') }}</p>
+                        </div>
+                    </div>
+                @endif
 
-        @if (session('warning'))
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '¡Atención!',
-                        text: '{{ session('warning') }}',
-                        timer: 4000,
-                        timerProgressBar: true,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        background: '#fffbeb',
-                        color: '#d97706'
-                    });
-                });
-            </script>
-        @endif
+                @if (session('warning'))
+                    <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div class="flex items-center">
+                            <i class='bx bx-error text-yellow-600 text-xl mr-3'></i>
+                            <p class="text-yellow-800 font-medium">{{ session('warning') }}</p>
+                        </div>
+                    </div>
+                @endif
 
         <!-- Enhanced Content Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
