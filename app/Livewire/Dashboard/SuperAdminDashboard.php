@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Personas;
 use App\Models\Solicitud;
 use App\Models\Visita;
+use App\Models\Reunion;
 use App\Models\Ambito;
 use App\Models\Institucion;
 use App\Models\Role;
