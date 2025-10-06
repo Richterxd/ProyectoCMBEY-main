@@ -15,6 +15,7 @@ class AdministradorDashboard extends Component
     public $activeTab = 'dashboard';
     public $solicitudes;
     public $visitas;
+    public $reuniones;
     public $ambitos;
     public $usuarios;
 
