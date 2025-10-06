@@ -46,7 +46,7 @@ class Reunion extends Model
      */
     public function solicitud(): BelongsTo
     {
-        return $this->belongsTo(Solicitud::class);
+        return $this->belongsTo(Solicitud::class, 'solicitud_id', 'solicitud_id');
     }
 
     /**
