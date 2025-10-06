@@ -95,16 +95,32 @@
                 </div>
 
                 @if($reuniones->isEmpty())
-                    <div class="text-center py-8">
-                        <i class='bx bx-calendar-x text-4xl text-gray-400 mb-4'></i>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">No hay reuniones</h3>
-                        <p class="text-gray-500">
+                    <div class="text-center py-20">
+                        <div class="flex flex-col items-center">
+                            <div class="relative mb-8">
+                                <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center shadow-xl">
+                                    <i class='bx bx-calendar-x text-5xl text-gray-400'></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                                    <i class='bx bx-plus text-white text-lg'></i>
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">No hay reuniones registradas</h3>
+                            <p class="text-gray-600 mb-8 max-w-md text-center leading-relaxed">
+                                @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
+                                    Comience creando una nueva reunión para gestionar las actividades municipales y coordinar con las instituciones del municipio.
+                                @else
+                                    No se han programado reuniones relacionadas a tus solicitudes
+                                @endif
+                            </p>
                             @if(Auth::user()->isSuperAdministrador() || Auth::user()->isAdministrador())
-                                Crea la primera reunión para comenzar a gestionar las actividades municipales
-                            @else
-                                No se han programado reuniones relacionadas a tus solicitudes
+                                <button wire:click="setActiveTab('create')"
+                                       class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white rounded-2xl hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105">
+                                    <i class='bx bx-plus mr-3 text-2xl group-hover:rotate-90 transition-transform duration-300'></i>
+                                    <span class="font-bold text-lg">Crear Primera Reunión</span>
+                                </button>
                             @endif
-                        </p>
+                        </div>
                     </div>
                 @else
                     <div class="overflow-x-auto">
