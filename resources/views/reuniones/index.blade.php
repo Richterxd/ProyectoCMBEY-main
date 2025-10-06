@@ -64,42 +64,42 @@
 
                     <div class="overflow-x-auto">
                         <table class="w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <i class='bx bx-text mr-1'></i>
-                                            Reunión
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bx-text text-gray-400'></i>
+                                            <span>Reunión</span>
                                         </div>
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <i class='bx bx-file-blank mr-1'></i>
-                                            Solicitud
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bx-file-blank text-gray-400'></i>
+                                            <span>Solicitud</span>
                                         </div>
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <i class='bx bx-buildings mr-1'></i>
-                                            Institución
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bx-buildings text-gray-400'></i>
+                                            <span>Institución</span>
                                         </div>
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <i class='bx bx-calendar mr-1'></i>
-                                            Fecha
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bx-calendar text-gray-400'></i>
+                                            <span>Fecha</span>
                                         </div>
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <i class='bx bx-group mr-1'></i>
-                                            Asistentes
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bx-group text-gray-400'></i>
+                                            <span>Asistentes</span>
                                         </div>
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        <div class="flex items-center">
-                                            <i class='bx bx-cog mr-1'></i>
-                                            Acciones
+                                    <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <i class='bx bx-cog text-gray-400'></i>
+                                            <span>Acciones</span>
                                         </div>
                                     </th>
                                 </tr>
