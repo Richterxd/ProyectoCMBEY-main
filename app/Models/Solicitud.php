@@ -191,7 +191,7 @@ class Solicitud extends Model
     
     public function reuniones(): HasMany
     {
-        return $this->hasMany(Reunion::class, 'solicitud_id', 'id');
+        return $this->hasMany(Reunion::class, 'solicitud_id', 'solicitud_id');
     }
 
     // Automatically set update timestamps
