@@ -43,18 +43,98 @@
             </div>
         </div>
 
-        <!-- Success Message - Enhanced -->
-        @if (session('success'))
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 shadow-sm">
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                            <i class='bx bx-check text-white text-lg'></i>
+        <!-- Enhanced Filters & Controls Section -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 mb-6 animate-fade-in">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                    <!-- Search & Filters -->
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 flex-1">
+                        <!-- Search Bar -->
+                        <div class="relative flex-1 max-w-md">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class='bx bx-search text-gray-400 text-lg'></i>
+                            </div>
+                            <input type="text" 
+                                   id="searchInput"
+                                   class="block w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm" 
+                                   placeholder="Buscar reuniones...">
                         </div>
-                        <span class="text-green-800 font-medium">{{ session('success') }}</span>
+                        
+                        <!-- Date Filter -->
+                        <div class="relative">
+                            <select id="dateFilter" class="block w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm">
+                                <option value="">Todas las fechas</option>
+                                <option value="today">Hoy</option>
+                                <option value="week">Esta semana</option>
+                                <option value="month">Este mes</option>
+                                <option value="future">Próximas</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Institution Filter -->
+                        <div class="relative">
+                            <select id="institutionFilter" class="block w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm">
+                                <option value="">Todas las instituciones</option>
+                                @foreach($reuniones->unique('institucion.titulo') as $reunion)
+                                    @if($reunion->institucion)
+                                        <option value="{{ $reunion->institucion->titulo }}">{{ $reunion->institucion->titulo }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- View Controls & Export -->
+                    <div class="flex items-center space-x-3">
+                        <!-- View Toggle -->
+                        <div class="flex bg-gray-100 rounded-xl p-1">
+                            <button id="tableView" class="px-4 py-2 rounded-lg bg-white shadow-sm text-gray-700 text-sm font-medium transition-all duration-200">
+                                <i class='bx bx-table mr-2'></i>Tabla
+                            </button>
+                            <button id="cardView" class="px-4 py-2 rounded-lg text-gray-600 text-sm font-medium hover:bg-white hover:shadow-sm transition-all duration-200">
+                                <i class='bx bx-grid-alt mr-2'></i>Cards
+                            </button>
+                        </div>
+                        
+                        <!-- Export Button -->
+                        <div class="relative">
+                            <button id="exportBtn" class="inline-flex items-center px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                <i class='bx bx-download mr-2'></i>
+                                <span class="hidden sm:inline">Exportar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Filters Display -->
+                <div id="activeFilters" class="hidden mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-sm font-medium text-gray-600">Filtros activos:</span>
+                        <div id="filterTags" class="flex flex-wrap gap-2"></div>
+                        <button id="clearFilters" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Limpiar filtros</button>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Success Message with SweetAlert2 -->
+        @if (session('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: '{{ session('success') }}',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        background: '#f0fdf4',
+                        color: '#166534'
+                    });
+                });
+            </script>
         @endif
 
         <!-- Content Section - Enhanced -->
