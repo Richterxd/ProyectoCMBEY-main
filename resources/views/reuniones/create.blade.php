@@ -131,28 +131,54 @@
 
         <!-- Content Section -->
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Alerts Section -->
+            <!-- Enhanced Alerts with SweetAlert2 -->
             @if($errors->any())
-                <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div class="flex items-center mb-2">
-                        <i class='bx bx-error-circle text-red-600 mr-2'></i>
-                        <h3 class="text-red-800 font-medium">Hay errores en el formulario</h3>
-                    </div>
-                    <ul class="text-red-700 text-sm space-y-1 ml-6">
-                        @foreach($errors->all() as $error)
-                            <li>• {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const errors = @json($errors->all());
+                        let errorList = '<ul class="text-left list-disc list-inside space-y-1">';
+                        errors.forEach(error => {
+                            errorList += `<li>${error}</li>`;
+                        });
+                        errorList += '</ul>';
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Errores en el formulario!',
+                            html: `<div class="text-gray-700 mb-4">Por favor corrija los siguientes errores:</div>${errorList}`,
+                            confirmButtonText: 'Entendido',
+                            confirmButtonColor: '#ef4444',
+                            background: '#fef2f2',
+                            customClass: {
+                                title: 'text-red-800 font-bold',
+                                content: 'text-red-700',
+                                confirmButton: 'font-semibold'
+                            },
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            }
+                        });
+                    });
+                </script>
             @endif
 
             @if(session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <i class='bx bx-check-circle text-green-600 mr-2'></i>
-                        <span class="text-green-800">{{ session('success') }}</span>
-                    </div>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: '{{ session('success') }}',
+                            timer: 3000,
+                            timerProgressBar: true,
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            background: '#f0fdf4',
+                            color: '#166534'
+                        });
+                    });
+                </script>
             @endif
 
             <!-- Main Form -->
