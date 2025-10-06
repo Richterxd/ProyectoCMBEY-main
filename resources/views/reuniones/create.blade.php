@@ -31,31 +31,96 @@
             </div>
         </div>
 
-        <!-- Progress Indicator -->
-        <div class="bg-white border-b border-gray-200">
+        <!-- Enhanced Progress Indicator with Animations -->
+        <div class="bg-white/90 backdrop-blur-sm border-b border-gray-200 shadow-lg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-center py-4">
-                    <div class="flex items-center space-x-4 text-sm">
-                        <div class="flex items-center text-green-600">
-                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-medium mr-2">
-                                1
+                <div class="flex items-center justify-center py-8">
+                    <div class="flex items-center space-x-8 text-sm">
+                        <!-- Step 1: Información Básica -->
+                        <div class="flex items-center" id="step1">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-xl transform transition-all duration-300 hover:scale-110 step-indicator" data-step="1">
+                                    <i class='bx bx-info-circle text-xl'></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full items-center justify-center text-white text-xs font-bold shadow-lg hidden step-check" id="check1">
+                                    <i class='bx bx-check text-sm'></i>
+                                </div>
                             </div>
-                            <span class="font-medium">Información Básica</span>
-                        </div>
-                        <div class="w-12 h-0.5 bg-gray-300"></div>
-                        <div class="flex items-center text-green-600">
-                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-medium mr-2">
-                                2
+                            <div class="ml-4 hidden sm:block">
+                                <div class="font-bold text-blue-600">Paso 1</div>
+                                <div class="text-gray-600">Información Básica</div>
                             </div>
-                            <span class="font-medium">Relaciones</span>
                         </div>
-                        <div class="w-12 h-0.5 bg-gray-300"></div>
-                        <div class="flex items-center text-green-600">
-                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-medium mr-2">
-                                3
+                        
+                        <!-- Connection Line 1 -->
+                        <div class="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden max-w-20">
+                            <div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transform -translate-x-full transition-transform duration-500 step-progress" id="progress1"></div>
+                        </div>
+                        
+                        <!-- Step 2: Relaciones -->
+                        <div class="flex items-center" id="step2">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 font-bold text-lg shadow-lg transform transition-all duration-300 step-indicator" data-step="2">
+                                    <i class='bx bx-link-alt text-xl'></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg hidden step-check" id="check2">
+                                    <i class='bx bx-check text-sm'></i>
+                                </div>
                             </div>
-                            <span class="font-medium">Participantes</span>
+                            <div class="ml-4 hidden sm:block">
+                                <div class="font-bold text-gray-500 step-title" data-step="2">Paso 2</div>
+                                <div class="text-gray-400">Relaciones</div>
+                            </div>
                         </div>
+                        
+                        <!-- Connection Line 2 -->
+                        <div class="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden max-w-20">
+                            <div class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transform -translate-x-full transition-transform duration-500 step-progress" id="progress2"></div>
+                        </div>
+                        
+                        <!-- Step 3: Participantes -->
+                        <div class="flex items-center" id="step3">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 font-bold text-lg shadow-lg transform transition-all duration-300 step-indicator" data-step="3">
+                                    <i class='bx bx-group text-xl'></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg hidden step-check" id="check3">
+                                    <i class='bx bx-check text-sm'></i>
+                                </div>
+                            </div>
+                            <div class="ml-4 hidden sm:block">
+                                <div class="font-bold text-gray-500 step-title" data-step="3">Paso 3</div>
+                                <div class="text-gray-400">Participantes</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Connection Line 3 -->
+                        <div class="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden max-w-20">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transform -translate-x-full transition-transform duration-500 step-progress" id="progress3"></div>
+                        </div>
+                        
+                        <!-- Step 4: Finalizar -->
+                        <div class="flex items-center" id="step4">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 font-bold text-lg shadow-lg transform transition-all duration-300 step-indicator" data-step="4">
+                                    <i class='bx bx-check-circle text-xl'></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg hidden step-check" id="check4">
+                                    <i class='bx bx-check text-sm'></i>
+                                </div>
+                            </div>
+                            <div class="ml-4 hidden sm:block">
+                                <div class="font-bold text-gray-500 step-title" data-step="4">Finalizar</div>
+                                <div class="text-gray-400">Completado</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="pb-4">
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 rounded-full transform -translate-x-full transition-transform duration-1000" id="overallProgress"></div>
                     </div>
                 </div>
             </div>
