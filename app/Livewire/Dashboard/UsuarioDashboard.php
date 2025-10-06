@@ -19,6 +19,7 @@ class UsuarioDashboard extends Component
     public $activeTab = 'dashboard';
     public $solicitudes;
     public $visitas;
+    public $reuniones;
     public $ambitos;
     
     // Solicitud form properties
