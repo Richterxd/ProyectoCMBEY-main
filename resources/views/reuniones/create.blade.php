@@ -1,7 +1,10 @@
 <x-layouts.rbac>
     @section('title', 'Crear Nueva Reunión')
 
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20">
         <!-- Header Section -->
         <div class="bg-white shadow-lg border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
