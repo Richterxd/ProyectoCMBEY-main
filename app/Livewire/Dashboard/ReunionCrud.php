@@ -51,7 +51,7 @@ class ReunionCrud extends Component
         'solicitud_id' => 'required|exists:solicitudes,id',
         'institucion_id' => 'required|exists:instituciones,id',
         'asistentes' => 'required|array|min:1',
-        'concejal' => 'required|in_array:asistentes.*'
+        'concejal' => 'required'
     ];
 
     public function mount()
