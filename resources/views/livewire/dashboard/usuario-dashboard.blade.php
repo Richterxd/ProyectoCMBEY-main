@@ -391,6 +391,102 @@
     </div>
     @endif
 
+    <!-- Reuniones Tab -->
+    @if($activeTab === 'reuniones')
+    <div class="p-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    <i class='bx bx-group text-green-600 mr-3'></i>
+                    Mis Reuniones Programadas
+                </h2>
+
+                @if($reuniones->count() > 0)
+                    <div class="space-y-6">
+                        @foreach($reuniones as $reunion)
+                            <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                                <div class="flex flex-col md:flex-row md:justify-between md:items-start">
+                                    <div class="flex-1">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $reunion->titulo }}</h3>
+                                        <p class="text-gray-600 mb-3">{{ $reunion->descripcion ?? 'Sin descripción disponible' }}</p>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div class="flex items-center text-sm text-gray-500">
+                                                <i class='bx bx-calendar mr-2 text-blue-500'></i>
+                                                <span>{{ $reunion->fecha_reunion->format('d/m/Y H:i') }}</span>
+                                            </div>
+                                            <div class="flex items-center text-sm text-gray-500">
+                                                <i class='bx bx-map-pin mr-2 text-red-500'></i>
+                                                <span>{{ $reunion->ubicacion }}</span>
+                                            </div>
+                                            <div class="flex items-center text-sm text-gray-500">
+                                                <i class='bx bx-buildings mr-2 text-purple-500'></i>
+                                                <span>{{ $reunion->institucion->titulo ?? 'Sin institución' }}</span>
+                                            </div>
+                                            <div class="flex items-center text-sm text-gray-500">
+                                                <i class='bx bx-file-blank mr-2 text-green-500'></i>
+                                                <span>{{ $reunion->solicitud->titulo ?? 'Sin solicitud' }}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Asistentes -->
+                                        <div class="flex items-center mb-3">
+                                            <i class='bx bx-group mr-2 text-blue-500'></i>
+                                            <span class="text-sm text-gray-600 mr-3">Asistentes ({{ $reunion->asistentes->count() }}):</span>
+                                            <div class="flex flex-wrap gap-2">
+                                                @foreach($reunion->asistentes->take(3) as $asistente)
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        {{ $asistente->nombre }} {{ $asistente->apellido }}
+                                                        @if($asistente->pivot->es_concejal)
+                                                            <i class='bx bx-star ml-1 text-yellow-500'></i>
+                                                        @endif
+                                                    </span>
+                                                @endforeach
+                                                @if($reunion->asistentes->count() > 3)
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                                        +{{ $reunion->asistentes->count() - 3 }} más
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Status Badge -->
+                                    <div class="mt-4 md:mt-0">
+                                        @php
+                                            $now = now();
+                                            $fechaReunion = $reunion->fecha_reunion;
+                                            if ($fechaReunion->isFuture()) {
+                                                $status = 'Programada';
+                                                $colorClass = 'bg-blue-100 text-blue-800';
+                                            } elseif ($fechaReunion->isToday()) {
+                                                $status = 'Hoy';
+                                                $colorClass = 'bg-green-100 text-green-800';
+                                            } else {
+                                                $status = 'Realizada';
+                                                $colorClass = 'bg-gray-100 text-gray-600';
+                                            }
+                                        @endphp
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium {{ $colorClass }}">
+                                            {{ $status }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <i class='bx bx-calendar-x text-6xl text-gray-400 mb-4'></i>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">No hay reuniones programadas</h3>
+                        <p class="text-gray-600">Las reuniones relacionadas con tus solicitudes aparecerán aquí cuando sean programadas por la administración.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Perfil Tab -->
     @if($activeTab === 'perfil')
     <div class="p-6">
