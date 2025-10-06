@@ -137,19 +137,28 @@
                 </div>
             </a>
 
-            <button wire:click="setActiveTab('visitas')"
-                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+            <button wire:click="setActiveTab('reuniones')"
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-green-500">
                 <div class="text-center">
-                    <i class='bx bx-calendar-check text-4xl text-blue-600 mb-3'></i>
+                    <i class='bx bx-group text-4xl text-green-600 mb-3'></i>
+                    <h3 class="font-bold text-gray-900">Mis Reuniones</h3>
+                    <p class="text-sm text-gray-600 mt-1">Reuniones programadas</p>
+                </div>
+            </button>
+
+            <button wire:click="setActiveTab('visitas')"
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-purple-500">
+                <div class="text-center">
+                    <i class='bx bx-calendar-check text-4xl text-purple-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Mis Visitas</h3>
                     <p class="text-sm text-gray-600 mt-1">Programadas y realizadas</p>
                 </div>
             </button>
 
             <button wire:click="setActiveTab('perfil')"
-                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-blue-500">
+                class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-gray-500">
                 <div class="text-center">
-                    <i class='bx bx-user text-4xl text-blue-600 mb-3'></i>
+                    <i class='bx bx-user text-4xl text-gray-600 mb-3'></i>
                     <h3 class="font-bold text-gray-900">Mi Perfil</h3>
                     <p class="text-sm text-gray-600 mt-1">Actualizar información</p>
                 </div>
