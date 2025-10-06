@@ -138,9 +138,42 @@ class ReunionController extends Controller
      */
     public function destroy(Reunion $reunion)
     {
-        $reunion->delete();
+        try {
+            // Detach all participants first
+            $reunion->asistentes()->detach();
+            
+            // Delete the reunion
+            $reunion->delete();
 
-        return redirect()->route('dashboard.reuniones.index')
-                         ->with('success', 'Reunión eliminada exitosamente.');
+            return redirect()->route('dashboard.reuniones.index')
+                             ->with('success', 'Reunión eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.reuniones.index')
+                             ->with('error', 'Error al eliminar la reunión: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Generate PDF report for the reunion.
+     */
+    public function generatePDF(Reunion $reunion)
+    {
+        try {
+            $reunion->load(['institucion', 'solicitud', 'asistentes']);
+            
+            // Check if dompdf is available
+            if (!class_exists('\Barryvdh\DomPDF\Facade\Pdf')) {
+                // Fallback to browser print
+                return redirect()->back()->with('warning', 'PDF no disponible. Use la función de imprimir del navegador.');
+            }
+
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reuniones.pdf', compact('reunion'));
+            
+            $filename = 'reunion_' . $reunion->id . '_' . date('Y-m-d') . '.pdf';
+            
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al generar PDF: ' . $e->getMessage());
+        }
     }
 }
