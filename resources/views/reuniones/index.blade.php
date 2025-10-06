@@ -190,14 +190,16 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-12 text-center">
+                                        <td colspan="6" class="px-6 py-16 text-center">
                                             <div class="flex flex-col items-center">
-                                                <i class='bx bx-calendar-x text-4xl text-gray-400 mb-4'></i>
-                                                <h3 class="text-lg font-medium text-gray-900 mb-2">No hay reuniones registradas</h3>
-                                                <p class="text-gray-500 mb-4">Comience creando una nueva reunión para gestionar las actividades municipales.</p>
+                                                <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
+                                                    <i class='bx bx-calendar-x text-4xl text-gray-400'></i>
+                                                </div>
+                                                <h3 class="text-lg font-semibold text-gray-900 mb-2">No hay reuniones registradas</h3>
+                                                <p class="text-gray-500 mb-6 max-w-md">Comience creando una nueva reunión para gestionar las actividades municipales y coordinar con las instituciones.</p>
                                                 <a href="{{ route('dashboard.reuniones.create') }}" 
-                                                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                                    <i class='bx bx-plus mr-2'></i>
+                                                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                                    <i class='bx bx-plus mr-2 text-lg'></i>
                                                     Crear Primera Reunión
                                                 </a>
                                             </div>
